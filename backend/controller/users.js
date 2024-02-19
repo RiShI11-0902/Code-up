@@ -1,11 +1,12 @@
 const model = require("../models/users")
 const User = model.User
+
 exports.createUser = async (req,res)=>{
     const user = new User();
-    const { email,name,password } = req.body
+    const { username,name,password } = req.body
 
     user.name = name
-    user.email = email
+    user.username = username
     user.password = password
 
     try {
@@ -27,3 +28,10 @@ exports.createUser = async (req,res)=>{
     }
 }
 
+
+exports.loginUser =  (req,res)=>{
+    const user = req.user
+    // console.log(req.user.id);
+    res.status(200).json({name: user.name, id: user.id})
+    // console.log(req.body.name);
+}

@@ -6,22 +6,23 @@ const cors = require("cors")
 const parser = require("body-parser")
 //for connection to db
 const connection = require("./databsaseConfig")
-const { initialize } = require("./passportConfig")
+const { initializePaasport } = require("./passportConfig")
 const session = require("express-session")
+
+initializePaasport(passport)
+connection()
 
 //middleware
 app.use(cors())
 app.use(express.json())
 
 //calling passport and db
-initialize(passport)
-connection()
 
 //sesssion creation
 app.use(session({
+    secret:"mkldfj",
     saveUninitialized: false,
     resave: false,
-    secret:"mkldfj"
 }))
 app.use(passport.initialize())
 app.use(passport.session())

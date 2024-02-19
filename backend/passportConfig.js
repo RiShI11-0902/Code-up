@@ -1,31 +1,30 @@
-const passport_local = require("passport-local")
-const {User} = require("./models/users")
-const passport = require("passport")
+const localStrategy = require("passport-local");
+const { User } = require("./models/users");
 
-exports.initialize =  (passport)=>{
-    passport.use(
-        new passport_local( async (email, password, next)=>{
-            try {
-                const findUser = await User.findOne({email})
-                if(!findUser) return next(false,null);
-                if(password != findUser.password) return next(false,null);
 
-                next(false, findUser)
-            } catch (error) {
-                next(error,false)
-            }
-        })
-    )
-    passport.serializeUser((user,next)=>{
-        next(null,user.id)
+exports.initializePaasport = (passport) => {
+  passport.use(
+    new localStrategy(async (username, password, next) => { // always take username and password only as the parameters nothing ele like email
+      try {
+        const findUser = await User.findOne({ username });
+        if (!findUser) return next(null, false);
+        if (password != findUser.password) return next(null, false);
+        next(null, findUser);
+      } catch (error) {
+        next(error, false);
+      }
     })
-    passport.deserializeUser(async (id,next) =>{
-        try {
-            const user = await User.findById(id)
-            return next(null,user)
-            
-        } catch (error) {
-            return next(error,false)
-        }
-    })
-}
+  );
+  passport.serializeUser((user, next) => {
+    next(null, user.id);
+    console.log("id is " + user.id);
+  });
+  passport.deserializeUser(async (id, next) => {
+    try {
+      const user = await User.findById(id);
+      return next(null, user);
+    } catch (error) {
+      return next(error, false);
+    }
+  });
+};
