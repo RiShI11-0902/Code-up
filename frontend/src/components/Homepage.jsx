@@ -40,9 +40,13 @@ const HomePage = () => {
     return (
         <>
             <div className='flex flex-col  md:w-full    md:flex-row '>
-                <p className='absolute text-white top-10 left-10 text-3xl font-extrabold'>CODE up.</p>
+                <p className='absolute text-white top-10 left-10 text-3xl font-extrabold'>
+                    <div className="logo  ml-5   text-4xl font-bold ">
+                        code<sup className="text-sm">Up</sup>.
+                    </div>
+                </p>
                 <div className='  bg-blue-950  min-h-screen  md:w-[60%] '>
-                    
+
                     <div className=' mt-10 p-10 md:p-0 md:mt-60 md:ml-20'>
                         <h1 className="text-3xl font-bold text-left mb-4 text-white">Welcome to the Quiz App!</h1>
                         <p className=" mb-4 text-white text-left md:w-[40rem] md:text-2xl font-semibold">"Discover, compete, and connect with our Quiz App! Explore fascinating questions, challenge your friends, and enjoy endless fun while learning together!"</p>

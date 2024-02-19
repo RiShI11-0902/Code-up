@@ -9,6 +9,7 @@ const connection = require("./databsaseConfig")
 const { initializePaasport } = require("./passportConfig")
 const session = require("express-session")
 
+//calling passport and db
 initializePaasport(passport)
 connection()
 
@@ -16,7 +17,7 @@ connection()
 app.use(cors())
 app.use(express.json())
 
-//calling passport and db
+
 
 //sesssion creation
 app.use(session({
@@ -30,6 +31,14 @@ app.use(passport.session())
 //individual routes
 const userRoutes = require("./routes/users")
 app.use("/user", userRoutes.route)
+
+const help = require("./routes/helper")
+app.use("/", help.route)
+
+
+
+
+
 
 app.get("/" , function(req,res){
     res.send("Hello")

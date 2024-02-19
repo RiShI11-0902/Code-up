@@ -29,3 +29,17 @@ export const loginUser = async (data) => {
     console.log(error);
   }
 };
+
+
+export const checkuser = async (data) =>{
+  try {
+    const res = axios.get("http://localhost:8000/checkuser", data)
+    if (res.ok) {
+      const response = await res
+      return response;
+    }
+  } catch (error) {
+    const err = await res;
+      return err;
+  }
+}
