@@ -35,6 +35,9 @@ app.use("/user", userRoutes.route)
 const help = require("./routes/helper")
 app.use("/", help.route)
 
+const questions = require("./routes/questions") 
+app.use("/", questions.route)
+
 
 
 

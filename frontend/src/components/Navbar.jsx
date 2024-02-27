@@ -32,7 +32,7 @@ const Navbar = () => {
           <div>
             <ul className="sm:flex space-x-5 font-bold hidden md:block md:flex md:items-center md:flex-row">
               <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
-              {/* <li className="cursor-pointer">Plot & Planters</li> */}
+              <li className="cursor-pointer">About</li>
               <li className="cursor-pointer">Contact</li>
              {/* <li>{ selectUser ? <Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link> : " " }</li>  */}
             </ul>

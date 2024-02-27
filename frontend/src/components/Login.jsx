@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <>
 
-      {selectUser && <Navigate to={"/quizpage"} replace={true} ></Navigate>}
+      {selectUser && <Navigate to={"/quiz-homepage"} replace={true} ></Navigate>}
 
       <div>
         <section className="-mt-36 -ml-10 dark:bg-gray-900">
@@ -67,7 +67,7 @@ const Login = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <button type='submit' className='bg-blue-900 text-white rounded-md  p-2'>
-                        Login
+                        Register
                       </button>
                     </div>
                     <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
@@ -91,14 +91,14 @@ const Login = () => {
                           message: 'E-mail not valid',
                         },
                       })} type="email" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" />
-                      {errors.username ? <p className='text-red-800'>{errors.email.message}</p> : " "}
+                      {errors.username ? <p className='text-red-800'>{errors.username}</p> : " "}
                     </div>
                     <div>
                       <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                       <input {...register("password", {
                         required: "password is Required",
                       })} type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
+                      {errors.password ? <p className='text-red-800'>{errors.password}</p> : " "}
                     </div>
                     <div className="flex items-center justify-between">
                       <button type='submit' className='bg-blue-900 text-white rounded-md  p-2'>
