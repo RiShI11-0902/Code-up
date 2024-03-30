@@ -6,6 +6,16 @@ const userSchema = new Schema({
     name: {type: String, required: true},
     role: {type: String, default: 'user', required:true},
     password: {type: String, required: true},
+    current_score:{type: Number, default: 0},
+    score_history: [{
+        topic: {
+          type: String,
+          required: true
+        },
+        score: {
+          type: String,
+        }
+      }]
 })
 
 exports.User = mongoose.model("user", userSchema)

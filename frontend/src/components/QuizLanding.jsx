@@ -53,7 +53,7 @@ const [p1, setP1] = useState()
             console.log(details);
             setQues(details.question)
             setP1( details.p1)
-            navigate("/quiz", {state:{questions: details.question, roomDetails: details.room, player1: details.p1, player2: details.p2}})
+            navigate("/quiz", {state:{questions: details.question, roomDetails: details.room, player1: details.p1, player2: details.p2, lang: lang}})
         })
 
     }
@@ -63,8 +63,8 @@ const [p1, setP1] = useState()
 
 
         socket.on("roomDetails", (details)=>{
-            // console.log(data);
-            navigate("/quiz", {state:{ roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1}})
+            console.log(details);
+            navigate("/quiz", {state:{ roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang}})
         })
     }
 
@@ -84,16 +84,16 @@ const [p1, setP1] = useState()
                     </div>
                     <div className='mt-5'>
                         <p className='mx-auto md:mx-40 text-4xl font-bold w-fit'>Play with </p>
-                        <div className='w-fit mx-auto md:mx-40 mt-5'>
-                            <input type="text" placeholder='Enter your Room' onChange={(event) => setRoom(event.target.value)} />
-                            <button onClick={joinRoom} >join Room</button>
+                        <div className='w-fit mx-auto md:mx-40 mt-5 flex flex-col md:flex-row md:space-x-6 items-center indent-5'>
+                            <input className='px-4 h-12 my-2 border rounded-lg border-1 border-gray-300 outline-blue-500' type="text" placeholder='Enter your Room' onChange={(event) => setRoom(event.target.value)} />
+                            <button className='border border-black border-2 p-2 rounded-2xl' onClick={joinRoom} >join Room</button>
                             {/* <button>Friend</button> */}
                         </div>
                         
                         <button></button>
                     </div>
                     <div className='w-fit mx-auto mt-5 md:mx-40 '>
-                        <button onClick={startQuiz} className='bg-yellow-100 hover:text-lg hover:px-20 border border-black text-black font-bold p-4 px-10 rounded-xl'>
+                        <button onClick={startQuiz} className='bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 rounded-xl'>
                             Start
                         </button>
                     </div>
