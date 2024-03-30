@@ -120,44 +120,39 @@ io.on("connection", (socket) => {
     // console.log("done");
   });
 
+  socket.on("endGame", async (data) => {
+    const room = await Room.findById(data.roomId);
 
+    socket.join(data.roomId);
+    room.completed += 1;
+    room.save();
 
-  socket.on("endGame", async (data)=>{
-    
-    const room = await Room.findById(data.roomId)
-
-    socket.join(data.roomId)
-    room.completed += 1
-    room.save()
-    
     if (room.completed == 2) {
-      io.to(data.roomId).emit("gameOver")
+      io.to(data.roomId).emit("gameOver");
     }
-  })
+  });
 
-  socket.on("closeGame", async (data)=>{
+  socket.on("closeGame", async (data) => {
     console.log(data);
-    const p1 = await User.findById(data.p1)
-    const p2 = await User.findById(data.p2)
-    const findLang = await Room.findById(data.roomId)
-    console.log(findLang.lang);
+    const findLang = await Room.findById(data.roomId);
+    // console.log(findLang.player1.id);
+    // console.log(findLang.player1._id);
 
-    if (data.p1 == findLang.player1) {
-      p1.score_history.push({topic: findLang.lang, score: data.player1})
-    }else{
-      p2.score_history.push({topic: findLang.lang, score: data.player2})
+    if (findLang.player1._id == data.user) {
+      const p1 = await User.findById(findLang.player1._id);
+      p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      p1.save();
+    } else {
+      const p2 = await User.findById(findLang.player2._id);
+      p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+      p2.save();
     }
 
-
-    p1.save()
-    p2.save()
-
-    const room = await Room.deleteOne({id: data.id})
+    // const room = await Room.deleteOne({ id: data.id });
     // console.log(p1);
     // console.log(p2);
     console.log("deleted");
-  })
-  
+  });
 
   socket.on("check_ans", async (data) => {
     console.log(data);
@@ -167,7 +162,9 @@ io.on("connection", (socket) => {
     // console.log(room.player1._id);
     // console.log(room.player2._id);
 
-    if (data.userId == room.player1._id) {
+    
+
+    if (data.userId == room.player1._id && data.correct == true) {
       console.log("ans by  player 1");
       room.score_p1 += 1;
       room.save();
@@ -176,12 +173,18 @@ io.on("connection", (socket) => {
         p1: room.score_p1,
         p2: room.score_p2,
       });
-    } else {
+    } else if(data.userId == room.player2._id && data.correct == true){
       console.log("ans by  player 1");
       room.score_p2 += 1;
       room.save();
       io.to(room.id).emit("correct_ans", {
         userId: room.player2._id,
+        p1: room.score_p1,
+        p2: room.score_p2,
+      });
+    }else{
+      io.to(room.id).emit("correct_ans", {
+        userId: room.player1._id,
         p1: room.score_p1,
         p2: room.score_p2,
       });

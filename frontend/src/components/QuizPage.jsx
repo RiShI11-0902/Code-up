@@ -89,11 +89,11 @@ const QuizPage = () => {
       // console.log(player_1 + " " + player_2);
       // socket.emit("update", {userId: selectUser.id, roomId, player_1,player_2})
       // setIndex(index+1)
-      socket.emit("check_ans", { userId: selectUser.id, roomId })
+      socket.emit("check_ans", { userId: selectUser.id, roomId, correct: true })
       console.log(index);
       setIndex(index + 1)
-
     } else {
+      socket.emit("check_ans", {userId: selectUser.id, roomId, correct: false})
       setIndex(index + 1)
     }
 
@@ -127,7 +127,7 @@ const QuizPage = () => {
   }
 
   const closeGame = ()=>{
-    socket.emit("closeGame", {roomId,player_1,player_2,lang,p1: p1._id,p2: p2._id})
+    socket.emit("closeGame", {roomId,player_1,player_2,lang,user: selectUser.id})
     navigate("/quiz-homepage")
   }
   return (
@@ -150,7 +150,7 @@ const QuizPage = () => {
           {
             <div className="md:w-full w-80 mt-20 md:mt-0 mx-auto bg-white shadow-md p-8 rounded-lg">
               {gameOver == true ? "Game Over" : " "}
-              <h2 className="text-xl font-semibold mb-4">{questions[index]?.question}</h2>
+              <h2 className="text-xl font-semibold mb-4">{ index > questions.length - 1 ? "Result Pending": questions[index]?.question}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {
                   questions[index]?.options?.map((option, ind) => {
