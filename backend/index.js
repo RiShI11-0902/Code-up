@@ -37,8 +37,6 @@ io.on("connection", (socket) => {
 
   socket.on("joinRoom", async (data) => {
 
-  
-
     const findRoom = await Room.findById(data.room).populate("player1");
     const findUser = await User.findById(data.userId);
     const question = await Question.aggregate([

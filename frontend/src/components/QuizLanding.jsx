@@ -4,76 +4,63 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import socketClient from "socket.io-client";
 import io from "socket.io-client";
 import { useSelector } from 'react-redux';
+import { RiLoader3Line } from "react-icons/ri";
+
 const socket = io.connect("http://localhost:8000");
-// const endPoint = "http://localhost:8000";
-// const socket = socketClient(endPoint)
+
 
 
 const QuizLanding = () => {
 
     const [lang, setLang] = useState()
     const [room, setRoom] = useState()
-const [ques, setQues] = useState()
-const [p1, setP1] = useState()
-    // const [socket, setSocket] = useState(second)
+    const [laoding, setlaoding] = useState(false)
+
     const navigate = useNavigate()
 
     const userId = useSelector(state => state.auth.loggedInUser.id)
 
-    // const joinRoom = () => {
-
-    //     if (room !== "") {
-            
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     socket.on("questions", (quesstions) => {
-    //         console.log(quesstions);
-    //         navigate("/quiz", {state:{questions: quesstions}})
-    //     })
-
-    //     console.log("vgftyfyt");
-
-    //     // return ()=>{
-    //     //     socket.disconnect()
-    //     // }
-
-    // }, [socket])
-
-    
-    
-
     const startQuiz = () => {
-        // const socket = socketClient(endPoint)
-        socket.emit("start", { room, lang, userId, method:"friend" })
 
-
-        socket.on("roomDetails", (details)=>{
-            console.log(details);
-            setQues(details.question)
-            setP1( details.p1)
-            navigate("/quiz", {state:{questions: details.question, roomDetails: details.room, player1: details.p1, player2: details.p2, lang: lang}})
-        })
-
+        if (room != undefined) {
+            alert("Please Join the room u have entered")
+        }else{
+            setlaoding(true)
+            socket.emit("start", { room, lang, userId, method: "friend" })
+            socket.on("roomDetails", (details) => {
+                console.log(details);
+                navigate("/quiz", { state: { questions: details.question, roomDetails: details.room, player1: details.p1, player2: details.p2, lang: lang } })
+            })
+        }
     }
 
-    const joinRoom = ()=>{
-        socket.emit("joinRoom", {room,userId})
+    const joinRoom = () => {
 
+       console.log(room);
 
-        socket.on("roomDetails", (details)=>{
+       if (room == undefined) {
+        alert("Please Enter Room")
+       }else{
+        setlaoding(true)
+        socket.emit("joinRoom", { room, userId })
+        socket.on("roomDetails", (details) => {
             console.log(details);
-            navigate("/quiz", {state:{ roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang}})
+            navigate("/quiz", { state: { roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang } })
         })
+       }
+
+        // console.log("Room is empty");
+        // alert("please enter a room first")
     }
+
+   
 
 
     return (
         <>
             <Navbar />
-            <div className='flex flex-col md:flex-row items-center md:justify-around'>
-                <div className='mt-28'>
+            <div className='flex flex-col space-y-5 md:space-y-0 md:flex-row items-center md:justify-around md:mt-28'>
+                <div className='mt-8 md:mt-0'>
                     <div className='md:mx-20 '>
                         <p className=' mx-auto md:mx-20 text-4xl font-bold w-fit  ml-20'>Choose your Language</p>
                         <div className="buttons w-fit md:mx-20 mx-auto mt-5">
@@ -83,29 +70,30 @@ const [p1, setP1] = useState()
                         </div>
                     </div>
                     <div className='mt-5'>
-                        <p className='mx-auto md:mx-40 text-4xl font-bold w-fit'>Play with </p>
+                        <p className='mx-auto md:mx-40 md:text-4xl text-xl font-bold w-fit'>Join a Room or Create One </p>
                         <div className='w-fit mx-auto md:mx-40 mt-5 flex flex-col md:flex-row md:space-x-6 items-center indent-5'>
                             <input className='px-4 h-12 my-2 border rounded-lg border-1 border-gray-300 outline-blue-500' type="text" placeholder='Enter your Room' onChange={(event) => setRoom(event.target.value)} />
-                            <button className='border border-black border-2 p-2 rounded-2xl' onClick={joinRoom} >join Room</button>
-                            {/* <button>Friend</button> */}
+                            <button className='border font-bold border-black border-2 p-2 rounded-2xl' onClick={joinRoom} >
+                                {laoding ? < RiLoader3Line className='animate-spin' /> : "Join Room"}
+                            </button>
                         </div>
-                        
                         <button></button>
                     </div>
-                    <div className='w-fit mx-auto mt-5 md:mx-40 '>
-                        <button onClick={startQuiz} className='bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 rounded-xl'>
-                            Start
+                    <div className='w-fit mx-auto mt-2 md:mx-40 '>
+                        <p className='font-semibold text-black'>Don't have a room create one Now!! </p>
+                        <button onClick={startQuiz} className='bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 rounded-xl mt-2'>
+                            {laoding ? < RiLoader3Line className='animate-spin' /> : "Start"}
                         </button>
                     </div>
                 </div>
-                <div className="div border border-black p-10">
+                <div className="div border md:w-[28rem] shadow-lg rounded-2xl shadow-black border-slate-100 p-10">
                     <p className='text-center text-4xl font-bold'>Rules:</p>
                     <p className='mt-5 p-1'>
                         <ol className='p-3 list-decimal'>
-                            <li>Players can play with a friend or a stranger. </li>
+                            <li>Players can play with a friend. </li>
                             <li>The game consists of single round with a set number of questions per round.</li>
                             <li>Questions may be multiple-choice, true/false, or output based.</li>
-                            <li>Players must answer within a specified time limit to earn points.</li>
+                            <li>Players must answer correctly to earn points.</li>
                             <li>The player with the highest score at the end of the final round wins.</li>
                             <li>Have fun and enjoy the friendly competition!</li>
                         </ol>
