@@ -16,7 +16,6 @@ const { Question } = require("./models/questions");
 const { Room } = require("./models/room");
 const end = 0;
 
-// const { startSocket, initSocket } = require("./controller/question")
 //calling passport and db
 initializePaasport(passport);
 connection();
@@ -33,19 +32,15 @@ const io = socketIo(server, {
   },
 });
 
-// const findQuestions = async (lang)=>{
-
-//     console.log(question);
-//     return question
-// }
-
 io.on("connection", (socket) => {
   console.log("user" + socket.id);
 
   socket.on("joinRoom", async (data) => {
+
+  
+
     const findRoom = await Room.findById(data.room).populate("player1");
     const findUser = await User.findById(data.userId);
-    // const question = await Question.find({ topic: findRoom.lang });
     const question = await Question.aggregate([
       { $match: { topic: findRoom.lang } }, // Match documents with the specified topic
       { $sample: { size: 10 } }, // Retrieve 10 random documents
@@ -55,7 +50,6 @@ io.on("connection", (socket) => {
 
     console.log(findRoom.player1.name);
     console.log(data.room);
-    // const pl1 = findRoom.player1.pop
 
     if (findRoom && findUser) {
       findRoom.player2 = data.userId;
@@ -67,19 +61,10 @@ io.on("connection", (socket) => {
         p1: findRoom.player1,
         question,
       });
-      console.log("ojijh");
     }
-
-    console.log("joined" + data);
   });
 
-  // const joinRoom = (socket,data)=>{
-  //   socket.join(data)
-  // }
-
   socket.on("start", async (data) => {
-    // joinRoom(socket, data.room)
-
     console.log(data);
 
     const newRoom = new Room();
@@ -92,7 +77,6 @@ io.on("connection", (socket) => {
 
       await newRoom.save();
 
-      // const question = await Question.find({ topic: data.lang }).limit(10);
       const question = await Question.aggregate([
         { $match: { topic: data.lang } }, // Match documents with the specified topic
         { $sample: { size: 10 } }, // Retrieve 10 random documents
@@ -110,14 +94,6 @@ io.on("connection", (socket) => {
         p2: "",
       });
     }
-
-    // const player2 = await User.findById(data.userId)
-    // io.emit("quiz_started")
-    // ioto.emit("questions", question)
-    // socket.to(data.room).emit("questions", question)
-    // io.to(data.room).emit("questions", question);
-    // // io.broadcast.to(data.room).emit("questions", question)
-    // console.log("done");
   });
 
   socket.on("endGame", async (data) => {
@@ -135,34 +111,45 @@ io.on("connection", (socket) => {
   socket.on("closeGame", async (data) => {
     console.log(data);
     const findLang = await Room.findById(data.roomId);
-    // console.log(findLang.player1.id);
-    // console.log(findLang.player1._id);
 
     if (findLang.player1._id == data.user) {
       const p1 = await User.findById(findLang.player1._id);
-      p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      // console.log(p1.score_history);
+      p1.score_history.forEach((val) => {
+
+        if (val.topic != findLang.lang) {
+          p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+        }
+
+        if (val.topic == findLang.lang) {
+          val.score = data.player_1;
+        }
+      });
       p1.save();
     } else {
       const p2 = await User.findById(findLang.player2._id);
-      p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+
+      p2.score_history.forEach((val) => {
+
+        if (val.topic != findLang.lang) {
+          p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+        }
+
+        if (val.topic == findLang.lang) {
+          val.score = data.player_2;
+        }
+      });
+
       p2.save();
     }
-
-    // const room = await Room.deleteOne({ id: data.id });
-    // console.log(p1);
-    // console.log(p2);
+   const delRoom =  await Room.findByIdAndDelete(data.roomId)
     console.log("deleted");
   });
 
   socket.on("check_ans", async (data) => {
     console.log(data);
     socket.join(data.roomId);
-    // const question = await Question.findById(data.q_id);
     const room = await Room.findById(data.roomId);
-    // console.log(room.player1._id);
-    // console.log(room.player2._id);
-
-    
 
     if (data.userId == room.player1._id && data.correct == true) {
       console.log("ans by  player 1");
@@ -173,7 +160,7 @@ io.on("connection", (socket) => {
         p1: room.score_p1,
         p2: room.score_p2,
       });
-    } else if(data.userId == room.player2._id && data.correct == true){
+    } else if (data.userId == room.player2._id && data.correct == true) {
       console.log("ans by  player 1");
       room.score_p2 += 1;
       room.save();
@@ -182,73 +169,13 @@ io.on("connection", (socket) => {
         p1: room.score_p1,
         p2: room.score_p2,
       });
-    }else{
+    } else {
       io.to(room.id).emit("correct_ans", {
         userId: room.player1._id,
         p1: room.score_p1,
         p2: room.score_p2,
       });
     }
-
-    // if (question.correctOptionIndex == data.ind) {
-    //   if (data.userId == room.player1._id) {
-    //     console.log("ans by  player 1"  );
-    //     room.score_p1 += 1
-    //     room.save()
-    //     io.to(room.id).emit("correct_ans", { p1: room.score_p1, p2: room.score_p2 })
-    //   }else{
-    //     room.score_p2 += 1;
-    //     room.save()
-    //     io.to(room.id).emit("correct_ans", { p1: room.score_p1, p2: room.score_p2 })
-    //   }
-    // }else{
-    //   console.log("Wrong ans");
-    //   io.to(room.id).emit("correct_ans", { p1: room.score_p1, p2: room.score_p2 })
-    // }
-
-    // console.log(room);
-
-    // id = data.id
-    // const question = await Question.findById(data.id);
-    // const p1 = await Room.findById(data.roomId).populate("player1");
-    // const p2 = await Room.findById(data.roomId).populate("player2");
-
-    // const p2 = await Room.findById(data.roomId).populate("player2");
-
-    // const user1 = await User.findById(data.userId);
-
-    // console.log(user1);
-    //
-
-    // io.to(data.roomId).emit("correct_ans", { user1, p2: p2.player2 });
-
-    // if (data.userId == p1.player1._id) {
-    //   console.log("player 1 answered");
-    //   p1.player1.current_score = 1 ;
-    //   await p1.save();
-    //   console.log(p1.player1.current_score);
-    //   socket.emit("correct_ans", { score: p1.player1.current_score, user: p1.player1._id });
-    // } else {
-    //   console.log("player 2 answerred");
-    //   p2.player2.current_score += 1;
-    //   await p2.save();
-    //   console.log(p2.player1.current_score);
-    //   socket.emit("correct_ans", { score: p2.player2.current_score, user: p2.player2._id });
-    // }
-
-    // const p1 = room.player1;
-    // const p2 = room.player2._id;
-    // console.log(p1);
-
-    // if (question.correctOptionIndex == data.ind && data.userId == p1) {
-    //   room.score_p1 += 1
-    //   socket.emit("correct_ans", { correct: true, userId: p2, score: room.score_p1 });
-    // } else if (question.correctOptionIndex == data.ind && data.userId == p2) {
-    //   room.score_p2 += 1
-    //   socket.emit("correct_ans", { correct: true, userId: p2, score: room.score_p2 });
-    // } else {
-    //   socket.emit("correct_ans", { correct: false });
-    // }
   });
 });
 
