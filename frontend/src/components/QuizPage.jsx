@@ -18,7 +18,8 @@ const QuizPage = () => {
   const [player_1, setPlayer_1] = useState(0)
   const [player_2, setPlayer_2] = useState(0)
 
-
+  const [isCorrect, setisCorrect] = useState(false)
+  const [selectedOption, setselectedOption] = useState(null)
   const navigate = useNavigate()
 
 
@@ -35,9 +36,9 @@ const QuizPage = () => {
   const p2 = location?.state?.player2
   const roomId = location?.state?.roomDetails?._id
   const lang = location?.state?.lang
-  console.log(p2._id);
-  console.log(p1._id);
-  console.log(lang);
+  // console.log(p2._id);
+  // console.log(p1._id);
+  // console.log(lang);
   // console.log(questions);
   // useEffect(() => {
   //   setSingle(location?.state?.questions[index])
@@ -49,17 +50,17 @@ const QuizPage = () => {
     socket.on("correct_ans", (data) => {
       // data.correct && data.userId == selectUser.id  ?  setScore(data.score_p1) : "" 
       // setScore(data.score)
-      console.log(data);
+      // console.log(data);
       setPlayer_1(data.p1)
       setPlayer_2(data.p2)
       // setIndex(index + 1)
       // p1.id == selectUser._id || p2.id == selectUser._id ? setIndex(index + 1) : " "
     })
     setRoomCopy(roomId)
-    socket.on("gameOver", ()=>{
+    socket.on("gameOver", () => {
       setgameOver(true)
     })
-  }, [player_1, player_2,gameOver])
+  }, [player_1, player_2, gameOver])
 
 
   const increase = (q_id, ind, index) => {
@@ -68,16 +69,16 @@ const QuizPage = () => {
     // }, 1000);
     // console.log(index);
 
-    console.log(questions.length);
-    console.log(index);
+    // console.log(questions.length);
+    // console.log(index);
 
     if (index >= questions.length - 1) {
       // setgameOver(true)
-      socket.emit("endGame", {roomId})
+      socket.emit("endGame", { roomId })
       // alert("Over")
       // console.log("Over brooooooo");
 
-      socket.on("gameOver", ()=>{
+      socket.on("gameOver", () => {
         setgameOver(true)
       })
 
@@ -89,16 +90,30 @@ const QuizPage = () => {
       // console.log(player_1 + " " + player_2);
       // socket.emit("update", {userId: selectUser.id, roomId, player_1,player_2})
       // setIndex(index+1)
+      setselectedOption(ind)
       socket.emit("check_ans", { userId: selectUser.id, roomId, correct: true })
-      console.log(index);
-      setIndex(index + 1)
+      // console.log(ind);
+      setisCorrect(true)
+      setTimeout(() => {
+        setIndex(index + 1)
+       setselectedOption(null) 
+        setisCorrect(false)
+      }, 1000);
     } else {
-      socket.emit("check_ans", {userId: selectUser.id, roomId, correct: false})
-      setIndex(index + 1)
+      socket.emit("check_ans", { userId: selectUser.id, roomId, correct: false })
+      // setBgColor("red")
+      setisCorrect(false)
+      setselectedOption(ind)
+      setTimeout(() => {
+        setisCorrect(false)
+        setselectedOption(null)
+        setIndex(index + 1)
+      }, 1000);
+      // setIndex(index + 1)
     }
 
     // socket.emit("check_ans", {q_id,ind,userId: selectUser.id,roomId})
-    console.log(p1.current_score);
+    // console.log(p1.current_score);
 
     // socket.on("check_ans",(data)=>{
     //   console.log(data);
@@ -126,8 +141,8 @@ const QuizPage = () => {
     }, 2000);
   }
 
-  const closeGame = ()=>{
-    socket.emit("closeGame", {roomId,player_1,player_2,lang,user: selectUser.id})
+  const closeGame = () => {
+    socket.emit("closeGame", { roomId, player_1, player_2, lang, user: selectUser.id })
     navigate("/quiz-homepage")
   }
   return (
@@ -150,21 +165,13 @@ const QuizPage = () => {
           {
             <div className="md:w-full w-80 mt-20 md:mt-0 mx-auto bg-white shadow-md p-8 rounded-lg">
               {gameOver == true ? "Game Over" : " "}
-              <h2 className="text-xl font-semibold mb-4">{ index > questions.length - 1 ? "Result Pending": questions[index]?.question}</h2>
+              <h2 className="text-xl font-semibold mb-4">{index > questions.length - 1 ? "Result Pending" : questions[index]?.question}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {
                   questions[index]?.options?.map((option, ind) => {
-                    return <div className="flex items-center space-x-2 p-4 bg-gray-100 rounded-lg">
-                      <input
-                        type="radio"
-                        id={`option${index}`}
-                        name="quizOption"
-                        value={option}
-                        className="text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                        onClick={() => increase(questions[index]._id, ind, index)}
-                      // checked
-                      />
-                      <label htmlFor={`option${index}`} className="text-gray-800">{option}</label>
+                    return <div className={` flex cursor-pointer items-center space-x-2 p-4 rounded-lg ${selectedOption === ind ? (isCorrect ? 'bg-green-500' : 'bg-red-500') : 'bg-gray-200'} `} onClick={() => increase(questions[index]._id, ind, index)}>
+                      <label id={ind}
+                        htmlFor={`option${index}`} className={`text-gray-800 cursor-pointer `}>{option}</label>
                     </div>
                   })
                 }
@@ -183,7 +190,7 @@ const QuizPage = () => {
                 Close
               </button>
             </div>
-            : <div  className='bg-white p-4 question '>
+            : <div className='bg-white p-4 question '>
               <p className='font-semibold'>Send this room id to your friend</p>
               <p className='text-xl font-bold' onChange={(e) => setRoomCopy(e.target.value)} >{roomId}</p>
               <CopyToClipboard text={roomCopy} onCopy={copyText} >
@@ -202,10 +209,9 @@ const QuizPage = () => {
           : " "  questions.length > index ? : <div className=''><p className='font-extrabold text-black'>"Game Over.........
                   {
                     player_1 > player_2 ? <div>{p1.name} is Winner</div> : <div>{p2.name} is Winner</div> || player_1 == player_2 ? <div>{p1.name} and {p2.name} both are Winner</div> : " "
-                  }
+                  } style={{ backgroundColor: bgColor }}
                   </p></div>
       } */}
-
 
 
 
