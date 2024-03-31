@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { logoutUserAsync } from "../../store/reducers/authReducer";
 // import { logoutUserAsync } from "../store/slice";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(true)
   const selectUser = useSelector(state => state.auth.loggedInUser)
   const [isOpen, setIsOpen] = useState(false)
-//   const options = ["Settings", "Sell Plants", "Logout",]
-//   const navigate = useNavigate();
+  //   const options = ["Settings", "Sell Plants", "Logout",]
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // const show = () => {
@@ -21,10 +22,13 @@ const Navbar = () => {
   //   setIsOpen(true );
   // }
 
+  // const selectUser = useSelector()
+
   return (
     <>
-
+      {selectUser == null && <Navigate to={"/"} replace={true} ></Navigate>}
       <div className="navbar flex items-center -ml-7 space-x-0 w-full mx-auto md:space-x-40 my-8">
+
         <div className="left  w-full flex items-center justify-evenly flex-row">
           <div className="logo  ml-5  text-black  text-4xl font-bold ">
             code<sup className="text-sm">Up</sup>.
@@ -34,7 +38,8 @@ const Navbar = () => {
               <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
               <li className="cursor-pointer">About</li>
               <li className="cursor-pointer">Contact</li>
-             {/* <li>{ selectUser ? <Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link> : " " }</li>  */}
+              <li className="cursor-pointer" onClick={() => dispatch(logoutUserAsync())}>Log out</li>
+              {/* <li>{ selectUser ? <Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link> : " " }</li>  */}
             </ul>
           </div>
           <div>
@@ -78,6 +83,7 @@ const Navbar = () => {
                       <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
                       <li>Flowers</li>
                       <li >Contact</li>
+                      <li onClick={() => dispatch(logoutUserAsync())}>Log out</li>
                       {/* { selectUser ? <li><Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link></li> : " " } */}
                     </ul>
                     {/* <div>

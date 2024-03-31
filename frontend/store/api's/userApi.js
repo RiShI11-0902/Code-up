@@ -43,3 +43,12 @@ export const checkuser = async (data) =>{
       return err;
   }
 }
+
+export const logout = async (data)=>{
+  try{
+    const res = axios.get("http://localhost:8000/user/logout")
+    return res
+  }catch (err){
+    console.log(err);
+  }
+}

@@ -7,5 +7,6 @@ const passport = require("passport")
 router
     .post("/createuser", userController.createUser)
     .post("/loginuser", passport.authenticate("local") ,  userController.loginUser)
-
+    .get("/logout", userController.logout )
+    
 exports.route = router
