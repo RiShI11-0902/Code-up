@@ -4,6 +4,7 @@ import { createUserAsync, loginUserAsync } from '../../store/reducers/authReduce
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from 'react-router-dom'
 import { RiLoader3Line } from "react-icons/ri";
+import { useEffect } from 'react'
 
 const Login = () => {
   const [flag, setFlag] = useState(false)
@@ -11,9 +12,20 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
   const selectUser = useSelector(state => state.auth.loggedInUser)
+  const err = useSelector(state => state.auth.error)
+
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    setError(false)
+  }, [err])
+  
+
+  
+
   return (
     <>
-      {selectUser && <Navigate to={"/quiz-homepage"} replace={true} ></Navigate>}
+      {selectUser  && <Navigate to={"/quiz-homepage"} replace={true} ></Navigate>}
       <div>
         <section className="-mt-36 -ml-10 dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -31,9 +43,12 @@ const Login = () => {
                       name: data.name,
                       password: data.password
                     }))
-
+                    setInterval(() => {
+                      setLoading(false)
+                    }, 1000);
                   })} className=" space-y-3 md:space-y-3" >
                     <div>
+                    {err ? <p className='text-red-700 font-semibold text-lg'>{err}</p>  : " "}
                       <label htmlfor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                       <input {...register("username", {
                         required: "E-mail is Required",
@@ -70,15 +85,18 @@ const Login = () => {
                       </span>
                     </p>
                   </form> : <form onSubmit={handleSubmit((data) => {
-                    setLoading(true)
                     console.log(loading);
+                    setLoading(true)
                     dispatch(loginUserAsync({
                       username: data.username,
                       password: data.password
                     }))
-                    console.log(data);
+                    setInterval(() => {
+                      setLoading(false)
+                    }, 1000);
                   })} className=" space-y-3 md:space-y-3" >
                     <div>
+                      {err ? <p className='text-red-700 font-semibold text-lg'>{err}</p>  : " "}
                       <label htmlfor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                       <input {...register("username", {
                         required: "E-mail is Required",

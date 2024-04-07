@@ -4,6 +4,7 @@ const app = express();
 const passport = require("passport");
 const cors = require("cors");
 const parser = require("body-parser");
+
 //for connection to db
 const connection = require("./databsaseConfig");
 
@@ -36,7 +37,6 @@ io.on("connection", (socket) => {
   console.log("user" + socket.id);
 
   socket.on("joinRoom", async (data) => {
-
     const findRoom = await Room.findById(data.room).populate("player1");
     const findUser = await User.findById(data.userId);
     const question = await Question.aggregate([
@@ -102,45 +102,93 @@ io.on("connection", (socket) => {
     room.save();
 
     if (room.completed == 2) {
+
+
+      const findLang = await Room.findById(data.roomId);
+
+      const p1 = await User.findById(data.p1._id);
+      // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+  
+      
+      if (p1.score_history.length == 0) {
+        p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      }else{
+        p1.score_history.map((val)=>{
+          if (val.topic == findLang.lang) {
+           val.score = data.player_1
+          }else{
+            p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+          }
+        })
+      }
+  
+      
+     await p1.save();
+  
+      const p2 = await User.findById(data.p2._id);
+      // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+  
+      if (p2.score_history.length == 0) {
+        p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+      }else{
+        p2.score_history.map((val)=>{
+          if (val.topic == findLang.lang) {
+           val.score = data.player_2
+          }else{
+            p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+          }
+        })
+      }
+  
+     await p2.save();
+  
       io.to(data.roomId).emit("gameOver");
     }
   });
 
   socket.on("closeGame", async (data) => {
+    console.log("Closed");
     console.log(data);
-    const findLang = await Room.findById(data.roomId);
 
-    if (findLang.player1._id == data.user) {
-      const p1 = await User.findById(findLang.player1._id);
-      // console.log(p1.score_history);
-      p1.score_history.forEach((val) => {
+  //   const findLang = await Room.findById(data.roomId);
 
-        if (val.topic != findLang.lang) {
-          p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-        }
+  //   const p1 = await User.findById(data.p1._id);
+  //   // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
 
-        if (val.topic == findLang.lang) {
-          val.score = data.player_1;
-        }
-      });
-      p1.save();
-    } else {
-      const p2 = await User.findById(findLang.player2._id);
+    
+  //   if (p1.score_history.length == 0) {
+  //     p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+  //   }else{
+  //     p1.score_history.map((val)=>{
+  //       if (val.topic == findLang.lang) {
+  //        val.score = data.player_1
+  //       }else{
+  //         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+  //       }
+  //     })
+  //   }
 
-      p2.score_history.forEach((val) => {
+    
+  //  await p1.save();
 
-        if (val.topic != findLang.lang) {
-          p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-        }
+  //   const p2 = await User.findById(data.p2._id);
+  //   // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
 
-        if (val.topic == findLang.lang) {
-          val.score = data.player_2;
-        }
-      });
+  //   if (p2.score_history.length == 0) {
+  //     p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+  //   }else{
+  //     p2.score_history.map((val)=>{
+  //       if (val.topic == findLang.lang) {
+  //        val.score = data.player_2
+  //       }else{
+  //         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+  //       }
+  //     })
+  //   }
 
-      p2.save();
-    }
-   const delRoom =  await Room.findByIdAndDelete(data.roomId)
+  //  await p2.save();
+
+    //  const delRoom =  await Room.findByIdAndDelete(data.roomId)
     console.log("deleted");
   });
 
@@ -179,6 +227,9 @@ io.on("connection", (socket) => {
 
 //sesssion creation
 
+const flash = require("connect-flash")
+
+
 app.use(
   session({
     secret: "mkldfj",
@@ -186,6 +237,7 @@ app.use(
     resave: false,
   })
 );
+app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 

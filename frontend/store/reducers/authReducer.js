@@ -5,7 +5,10 @@ export const createUserAsync = createAsyncThunk(
     "user/created",
     async (data) =>{
         const response = await createUser(data);
-        return response.data
+        if (response.data) {
+            return response.data
+        }
+        return response
     }
 )
 
@@ -13,7 +16,11 @@ export const loginUserAsync = createAsyncThunk(
     "user/login",
     async (data) =>{
         const response = await loginUser(data)
-        return response.data
+        console.log(response);
+        if (response.data) {
+            return response.data
+        }
+       return response
     }
 )
 
@@ -38,24 +45,42 @@ export const authReducer = createSlice({
     name: "user",
     initialState: {
         loggedInUser: null,
-        status: "idle"
+        status: "idle",
+        error: null
     },
     reducers: {},
-    extraReducers: (builder)=>{
-        builder.addCase(createUserAsync.fulfilled, (state,action)=>{
+    _extraReducers: (builder) => {
+        builder.addCase(createUserAsync.fulfilled, (state, action) => {
             // state.loggedInUser = action.payload
-            state.loggedInUser = action.payload
-        })
-        builder.addCase(loginUserAsync.fulfilled, (state,action)=>{
-            state.loggedInUser = action.payload
-        })
-        builder.addCase(checkUserAsync.fulfilled, (state,action)=>{
-            state.loggedInUser = action.payload
-        })
-        builder.addCase(logoutUserAsync.fulfilled, (state,action)=>{
-            state.loggedInUser = null
-        })
-    }
+            // state.loggedInUser = action.payload;
+            console.log(action.payload);
+            if (action.payload.id) {
+                state.loggedInUser = action.payload;
+            } else {
+                state.error = action.payload;
+            }
+        });
+        builder.addCase(loginUserAsync.fulfilled, (state, action) => {
+            if (action.payload.id) {
+                state.loggedInUser = action.payload;
+            } else {
+                state.error = action.payload;
+            }
+            console.log();
+        });
+        builder.addCase(checkUserAsync.fulfilled, (state, action) => {
+            state.loggedInUser = action.payload;
+        });
+        builder.addCase(logoutUserAsync.fulfilled, (state, action) => {
+            state.loggedInUser = null;
+        });
+    },
+    get extraReducers() {
+        return this._extraReducers;
+    },
+    set extraReducers(value) {
+        this._extraReducers = value;
+    },
 })
 
 export default authReducer.reducer

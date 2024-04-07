@@ -7,8 +7,8 @@ exports.initializePaasport = (passport) => {
     new localStrategy(async (username, password, next) => { // always take username and password only as the parameters nothing ele like email
       try {
         const findUser = await User.findOne({ username });
-        if (!findUser) return next(null, false);
-        if (password != findUser.password) return next(null, false);
+        if (!findUser) return next(null, false, {message: "Username Not Found!!!"}) ;
+        if (password != findUser.password) return next(null, false, {message: "Password Incorrect!!!"}) 
         next(null, findUser);
       } catch (error) {
         next(error, false);
