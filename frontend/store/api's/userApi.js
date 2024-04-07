@@ -3,7 +3,7 @@ import axios from "axios";
 export const createUser = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/user/createuser",
+      "/user/createuser", //http://localhost:8000/
       data
     );
     return response;
@@ -17,34 +17,12 @@ export const createUser = async (data) => {
   }
 };
 
-// export const loginUser = async (data) => {
-//   const err = null;
-//   try {
-//     const response =  axios.post("http://localhost:8000/user/loginuser", data);
-//     // return response
-//     // console.log(response);
-//     if (response.ok) {
-//       const res = await response;
-//       console.log(res);
-//       return res.data;
-//     }else {
-//       // const err = await response;
-//       // console.log(err);
-//       // return err;
-//       const err = (await response).status
-//       return err
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     err = error.message
-//     return err
-//   }
-// };
+
 
 export const loginUser = async (data) => {
 
   try {
-    const response = await axios.post("http://localhost:8000/user/loginuser", data);
+    const response = await axios.post("/user/loginuser", data); //http://localhost:8000
     // return response
     // console.log(response);
     if (response.status == 200) {
@@ -69,7 +47,7 @@ export const loginUser = async (data) => {
 
 export const checkuser = async (data) => {
   try {
-    const res = axios.get("http://localhost:8000/checkuser", data);
+    const res = axios.get("/checkuser", data); //http://localhost:8000
     if (res.ok) {
       const response = await res;
       return response;
@@ -82,7 +60,7 @@ export const checkuser = async (data) => {
 
 export const logout = async (data) => {
   try {
-    const res = axios.get("http://localhost:8000/user/logout");
+    const res = axios.get("/user/logout"); //http://localhost:8000
     return res;
   } catch (err) {
     console.log(err);

@@ -4,7 +4,7 @@ const connect = ()=>{
     main().catch(err => console.log(err))
 
    async function main(){
-    await mongosse.connect("mongodb+srv://rishi:nrarVWGs6IJLpADk@cluster0.sirc6hl.mongodb.net/code-up?retryWrites=true&w=majority")
+    await mongosse.connect(process.env.MONGO_URL)
     console.log("database connected");
    }
 }

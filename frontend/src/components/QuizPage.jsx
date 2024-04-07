@@ -115,7 +115,7 @@ const QuizPage = () => {
         </div>
       </div>
 
-      <div className='question mt-20 md:mt-0'>
+      <div className='question mt-16 md:mt-0'>
       {
         p1 !== " " && p2 !== "" && gameOver == false ? <div className='  p-1'>
           {

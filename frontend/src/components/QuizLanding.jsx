@@ -21,14 +21,12 @@ const QuizLanding = () => {
     const userId = useSelector(state => state.auth.loggedInUser.id)
 
     const startQuiz = () => {
-
-        if (lang == " ") {
+        console.log(lang);
+        if (lang == undefined) {
             alert("Please select any one language")
-        }
-
-        if (room != undefined) {
+        } else if (room != undefined) {
             alert("Please Join the room u have entered")
-        }else{
+        } else {
             setlaoding(true)
             socket.emit("start", { room, lang, userId, method: "friend" })
             socket.on("roomDetails", (details) => {
@@ -41,25 +39,25 @@ const QuizLanding = () => {
 
     const joinRoom = () => {
 
-       console.log(room);
+        console.log(room);
 
-       if (room == undefined) {
-        alert("Please Enter Room")
-       }else{
-        setlaoding(true)
-        socket.emit("joinRoom", { room, userId })
-        socket.on("roomDetails", (details) => {
-            console.log(details);
-            navigate("/quiz", { state: { roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang } })
-        })
-       }
+        if (room == undefined) {
+            alert("Please Enter Room")
+        } else {
+            setlaoding(true)
+            socket.emit("joinRoom", { room, userId })
+            socket.on("roomDetails", (details) => {
+                console.log(details);
+                navigate("/quiz", { state: { roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang } })
+            })
+        }
 
         // console.log("Room is empty");
         // alert("please enter a room first")
         setLang(" ")
     }
 
-   
+
 
 
     return (

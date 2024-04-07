@@ -1,9 +1,12 @@
 // Always required
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const passport = require("passport");
 const cors = require("cors");
 const parser = require("body-parser");
+const path = require("path");
+const flash = require("connect-flash");
 
 //for connection to db
 const connection = require("./databsaseConfig");
@@ -96,52 +99,92 @@ io.on("connection", (socket) => {
 
   socket.on("endGame", async (data) => {
     const room = await Room.findById(data.roomId);
-
+    console.log(data);
     socket.join(data.roomId);
     room.completed += 1;
     room.save();
 
     if (room.completed == 2) {
-
-
       const findLang = await Room.findById(data.roomId);
 
       const p1 = await User.findById(data.p1._id);
       // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-  
-      
+
+      // if (p1.score_history.length == 0) {
+      //   p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      // } else {
+      //   p1.score_history.map((val) => {
+      //     if (val.topic == findLang.lang) {
+      //       console.log("Exits");
+      //        val.score = data.player_1
+      //        return
+      //     } else {
+      //       console.log("Don't exits");
+      //       p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      //       return
+      //     }
+      //   });
+      // }
+
       if (p1.score_history.length == 0) {
         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-      }else{
-        p1.score_history.map((val)=>{
-          if (val.topic == findLang.lang) {
-           val.score = data.player_1
-          }else{
-            p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+      } else {
+        let topicExists = false;
+        p1.score_history.forEach((val) => {
+          if (val.topic === findLang.lang) {
+            console.log("Exists");
+            val.score = data.player_1;
+            topicExists = true;
           }
-        })
+        });
+        if (!topicExists) {
+          console.log("Doesn't exist");
+          p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+        }
       }
-  
       
-     await p1.save();
-  
+
+      await p1.save();
+
       const p2 = await User.findById(data.p2._id);
       // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-  
+
+      // if (p2.score_history.length == 0) {
+      //   p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+      // } else {
+      //   p2.score_history.map((val) => {
+      //     if (val.topic == findLang.lang) {
+      //       console.log("Exits");
+      //        val.score = data.player_2
+      //        return;
+      //     } else {
+      //       console.log("Don't exits");
+      //       p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+      //       return;
+      //     }
+      //   });
+      // }
+
       if (p2.score_history.length == 0) {
         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-      }else{
-        p2.score_history.map((val)=>{
-          if (val.topic == findLang.lang) {
-           val.score = data.player_2
-          }else{
-            p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+      } else {
+        let topicExists = false;
+        p2.score_history.forEach((val) => {
+          if (val.topic === findLang.lang) {
+            console.log("Exists");
+            val.score = data.player_2;
+            topicExists = true;
           }
-        })
+        });
+        if (!topicExists) {
+          console.log("Doesn't exist");
+          p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+        }
       }
-  
-     await p2.save();
-  
+      
+
+      await p2.save();
+
       io.to(data.roomId).emit("gameOver");
     }
   });
@@ -150,43 +193,41 @@ io.on("connection", (socket) => {
     console.log("Closed");
     console.log(data);
 
-  //   const findLang = await Room.findById(data.roomId);
+    //   const findLang = await Room.findById(data.roomId);
 
-  //   const p1 = await User.findById(data.p1._id);
-  //   // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+    //   const p1 = await User.findById(data.p1._id);
+    //   // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
 
-    
-  //   if (p1.score_history.length == 0) {
-  //     p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-  //   }else{
-  //     p1.score_history.map((val)=>{
-  //       if (val.topic == findLang.lang) {
-  //        val.score = data.player_1
-  //       }else{
-  //         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-  //       }
-  //     })
-  //   }
+    //   if (p1.score_history.length == 0) {
+    //     p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+    //   }else{
+    //     p1.score_history.map((val)=>{
+    //       if (val.topic == findLang.lang) {
+    //        val.score = data.player_1
+    //       }else{
+    //         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
+    //       }
+    //     })
+    //   }
 
-    
-  //  await p1.save();
+    //  await p1.save();
 
-  //   const p2 = await User.findById(data.p2._id);
-  //   // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+    //   const p2 = await User.findById(data.p2._id);
+    //   // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
 
-  //   if (p2.score_history.length == 0) {
-  //     p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-  //   }else{
-  //     p2.score_history.map((val)=>{
-  //       if (val.topic == findLang.lang) {
-  //        val.score = data.player_2
-  //       }else{
-  //         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-  //       }
-  //     })
-  //   }
+    //   if (p2.score_history.length == 0) {
+    //     p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+    //   }else{
+    //     p2.score_history.map((val)=>{
+    //       if (val.topic == findLang.lang) {
+    //        val.score = data.player_2
+    //       }else{
+    //         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
+    //       }
+    //     })
+    //   }
 
-  //  await p2.save();
+    //  await p2.save();
 
     //  const delRoom =  await Room.findByIdAndDelete(data.roomId)
     console.log("deleted");
@@ -227,9 +268,6 @@ io.on("connection", (socket) => {
 
 //sesssion creation
 
-const flash = require("connect-flash")
-
-
 app.use(
   session({
     secret: "mkldfj",
@@ -237,7 +275,7 @@ app.use(
     resave: false,
   })
 );
-app.use(flash())
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -248,10 +286,22 @@ app.use("/user", userRoutes.route);
 const help = require("./routes/helper");
 app.use("/", help.route);
 
+// const __dirname = path.resolve()
+
+// app.use(express.static(path.join(__dirname,"/frontend/dist")))
+
+app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.js"));
+});
+
 const questions = require("./routes/questions");
 const { on } = require("events");
 const { User } = require("./models/users");
 
-app.use("/", questions.route);
+app.use("/", (req, res) => {
+  res.send("Working");
+});
 
 server.listen(8000);

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 const Leaderboard = () => {
 
     const [users, setUsers] = useState([])
-    const [lang, setLang] = useState()
+    const [lang, setLang] = useState("HTML")
     const dispatch = useDispatch()
 
 
@@ -17,7 +17,7 @@ const Leaderboard = () => {
         //   dispatch(findAllUser())
 
         const users = async () => {
-            const allUser = await axios.post("http://localhost:8000/user/allUser", { lang })
+            const allUser = await axios.post("/user/allUser", { lang }) //http://localhost:8000
             console.log(allUser.data.user);
             setUsers(allUser.data.user)
         }
@@ -48,7 +48,7 @@ const Leaderboard = () => {
 
                                                 <p className='text-lg font-semibold'>
                                                     {
-                                                        lang == topic.topic ? topic.topic : "  "
+                                                        lang == topic.topic ? topic.topic : " "
                                                     }
                                                 </p>
                                                 <p>{
