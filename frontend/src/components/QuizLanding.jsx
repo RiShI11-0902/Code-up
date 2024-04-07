@@ -22,6 +22,10 @@ const QuizLanding = () => {
 
     const startQuiz = () => {
 
+        if (lang == " ") {
+            alert("Please select any one language")
+        }
+
         if (room != undefined) {
             alert("Please Join the room u have entered")
         }else{
@@ -32,6 +36,7 @@ const QuizLanding = () => {
                 navigate("/quiz", { state: { questions: details.question, roomDetails: details.room, player1: details.p1, player2: details.p2, lang: lang } })
             })
         }
+        setLang(" ")
     }
 
     const joinRoom = () => {
@@ -51,6 +56,7 @@ const QuizLanding = () => {
 
         // console.log("Room is empty");
         // alert("please enter a room first")
+        setLang(" ")
     }
 
    
@@ -74,7 +80,7 @@ const QuizLanding = () => {
                         <div className='w-fit mx-auto md:mx-40 mt-5 flex flex-col md:flex-row md:space-x-6 items-center indent-5'>
                             <input className='px-4 h-12 my-2 border rounded-lg border-1 border-gray-300 outline-blue-500' type="text" placeholder='Enter your Room' onChange={(event) => setRoom(event.target.value)} />
                             <button className='border font-bold border-black border-2 p-2 rounded-2xl' onClick={joinRoom} >
-                                {laoding ? < RiLoader3Line className='animate-spin' /> : "Join Room"}
+                                {laoding && room != undefined ? < RiLoader3Line className='animate-spin' /> : "Join Room"}
                             </button>
                         </div>
                         <button></button>
@@ -82,7 +88,7 @@ const QuizLanding = () => {
                     <div className='w-fit mx-auto mt-2 md:mx-40 '>
                         <p className='font-semibold text-black'>Don't have a room create one Now!! </p>
                         <button onClick={startQuiz} className='bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 rounded-xl mt-2'>
-                            {laoding ? < RiLoader3Line className='animate-spin' /> : "Start"}
+                            {laoding && room == undefined ? < RiLoader3Line className='animate-spin' /> : "Start"}
                         </button>
                     </div>
                 </div>

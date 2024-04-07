@@ -56,7 +56,7 @@ const QuizPage = () => {
 
     // check if question exceed the length 
     if (index >= questions.length - 1) {
-      socket.emit("endGame", { roomId }) // emit means to send data to server send id to server for ending the game
+      socket.emit("endGame", { roomId, player_1, player_2, lang,p1,p2 }) // emit means to send data to server send id to server for ending the game
 
       // listen for the gameOver event from server 
       socket.on("gameOver", () => {
@@ -98,7 +98,8 @@ const QuizPage = () => {
   // closing game
   const closeGame = () => {
     setloading(true)
-    socket.emit("closeGame", { roomId, player_1, player_2, lang, user: selectUser.id })
+    socket.emit("closeGame", { roomId, player_1, player_2, lang,p1,p2 })
+    // socket.emit("closeGame", { roomId, player_1, player_2, lang,p1,p2 })
     navigate("/quiz-homepage")
   }
   return (
@@ -114,8 +115,9 @@ const QuizPage = () => {
         </div>
       </div>
 
+      <div className='question mt-20 md:mt-0'>
       {
-        p1 !== " " && p2 !== "" && gameOver == false ? <div className='question p-1'>
+        p1 !== " " && p2 !== "" && gameOver == false ? <div className='  p-1'>
           {
             <div className="md:w-full w-80 mt-20 md:mt-0 mx-auto bg-white shadow-md p-8 rounded-lg">
               {gameOver == true ? "Game Over" : " "}
@@ -124,15 +126,16 @@ const QuizPage = () => {
                 {
                   questions[index]?.options?.map((option, ind) => {
                     return <div className={` flex cursor-pointer items-center space-x-2 p-4 rounded-lg ${selectedOption === ind ? (isCorrect ? 'bg-green-500' : 'bg-red-500') : 'bg-gray-200'} `} onClick={() => increase(questions[index]._id, ind, index)}>
+                      <label htmlFor="">{ind+1 +")"}</label>
                       <label id={ind}
-                        htmlFor={`option${index}`} className={`text-gray-800 cursor-pointer `}>{option}</label>
+                        htmlFor={`option${index}`} className={`text-gray-800 cursor-pointer text-sm md:text-xl `}>{option}</label>
                     </div>
                   })
                 }
               </div>
             </div>
           }
-        </div> : <div className=' question md:w-[30rem] h-52 mx-auto rounded-3xl bg-white p-5 '>
+        </div> : <div className=' question w-80 md:w-[30rem] h-52 mx-auto rounded-3xl bg-white p-5 '>
           {gameOver ?
             <div className='font-bold text-xl md:text-3xl'>
               <div className="box text-center">
@@ -140,7 +143,7 @@ const QuizPage = () => {
                   player_1 > player_2 ? <div>{p1.name} Won the Match with <p className='text-2xl text-green-800 font-extrabold'>{player_1} </p> Score </div> : (player_2 > player_1 ? <div>{p2.name} Won the Match with <span className='text-2xl text-green-800 font-extrabold'>{player_2} </span> Score</div> : (player_1 == player_2 ? <div className='text-lg text-green-950 font-extrabold'> Match Is Drawn </div> : null))
                 }
               </div>
-              <button className='mt-5 relative left-[30%] md:left-[45%] text-lg w-fit  rounded-3xl border border-2 border-black px-2' onClick={closeGame}>
+              <button className='mt-5 relative left-[38%] md:left-[44%] text-lg w-fit  rounded-3xl border border-2 border-black px-2' onClick={closeGame}>
                 {loading ? <RiLoader3Line /> : "Close"}
               </button>
             </div>
@@ -155,6 +158,9 @@ const QuizPage = () => {
 
         </div>
       }
+      </div>
+
+     
     </>
   )
 }
