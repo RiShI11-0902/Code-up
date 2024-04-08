@@ -14,10 +14,10 @@ exports.createUser = async (req, res) => {
     } else {
       const user = new User();
 
-      user.name = name;
       const hashedPassword = bcrypt.hashSync(password.toString(),10)
-      user.username = hashedPassword;
-      user.password = password;
+      user.name = name;
+      user.username = username;
+      user.password = hashedPassword;
       await user.save();
       req.login(user, (err) => {
         if (err) {
