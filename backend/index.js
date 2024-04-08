@@ -297,7 +297,6 @@ app.get("*", (req, res) => {
 });
 
 const questions = require("./routes/questions");
-const { on } = require("events");
 const { User } = require("./models/users");
 
 app.use("/", (req, res) => {

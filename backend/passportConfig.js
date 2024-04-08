@@ -1,6 +1,6 @@
 const localStrategy = require("passport-local");
 const { User } = require("./models/users");
-
+const bcrypt = require("bcrypt")
 
 exports.initializePaasport = (passport) => {
   passport.use(
@@ -8,7 +8,7 @@ exports.initializePaasport = (passport) => {
       try {
         const findUser = await User.findOne({ username });
         if (!findUser) return next(null, false, {message: "Username Not Found!!!"}) ;
-        if (password != findUser.password) return next(null, false, {message: "Password Incorrect!!!"}) 
+        if (!bcrypt.compareSync(password,findUser.password)) return next(null, false, {message: "Password Incorrect!!!"}) 
         next(null, findUser);
       } catch (error) {
         next(error, false);
