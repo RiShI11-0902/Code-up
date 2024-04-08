@@ -6,7 +6,7 @@ import io from "socket.io-client";
 import { useSelector } from 'react-redux';
 import { RiLoader3Line } from "react-icons/ri";
 
-const socket = io.connect("http://localhost:8000");
+const socket = io.connect("/"); //http://localhost:8000
 
 
 
