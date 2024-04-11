@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { checkUserAsync } from '../store/reducers/authReducer'
 import QuizPage from './components/QuizPage'
 import Leaderboard from './components/Leaderboard'
+import About from './components/About'
 function App() {
 
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ function App() {
           <Route path='/quiz-homepage' element={ <Protected><QuizLanding /></Protected> } />
           <Route path='/quiz' element={ <Protected><QuizPage /></Protected> } />
           <Route path='/leaderboard' element={<Leaderboard/>} />
+          <Route path='/about' element={<About/>} />
         </Routes>
       </Router>
     </>

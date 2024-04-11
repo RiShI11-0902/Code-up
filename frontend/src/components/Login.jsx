@@ -38,14 +38,21 @@ const Login = () => {
                   flag ? <form onSubmit={handleSubmit((data) => {
                     setLoading(true)
                     console.log(loading);
-                    dispatch(createUserAsync({
-                      username: data.username,
-                      name: data.name,
-                      password: data.password
-                    }))
-                    setInterval(() => {
-                      setLoading(false)
-                    }, 1000);
+                    if (data) {
+                      dispatch(createUserAsync({
+                        username: data.username,
+                        name: data.name,
+                        password: data.password
+                      })).then(() => {
+                        setLoading(false); // Reset loading state after dispatch completes
+                      }).catch((error) => {
+                        console.error('Error creating user:', error);
+                        setLoading(false); // Reset loading state in case of error
+                      });
+                    }
+                    // setInterval(() => {
+                    //   setLoading(false)
+                    // }, 1000);
                   })} className=" space-y-3 md:space-y-3" >
                     <div>
                     {err ? <p className='text-red-700 font-semibold text-lg'>{err}</p>  : " "}
@@ -57,7 +64,7 @@ const Login = () => {
                           message: 'E-mail not valid',
                         },
                       })} type="email" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" />
-                      {errors.username ? <p className='text-red-800'>{errors.email.message}</p> : " "}
+                      {/* {errors.username ? <p className='text-red-800'>{errors.email.message}</p> : " "} */}
                     </div>
                     {
                       flag ? <div>
@@ -105,14 +112,14 @@ const Login = () => {
                           message: 'E-mail not valid',
                         },
                       })} type="email" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" />
-                      {errors.username ? <p className='text-red-800'>{errors.username}</p> : " "}
+                      {/* {errors.username ? <p className='text-red-800'>{errors.username}</p> : " "} */}
                     </div>
                     <div>
                       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                       <input {...register("password", {
                         required: "password is Required",
                       })} type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                      {errors.password ? <p className='text-red-800'>{errors.password}</p> : " "}
+                      {/* {errors.password ? <p className='text-red-800'>{errors.password}</p> : " "} */}
                     </div>
                     <div className="flex items-center justify-between">
                       <button type='submit' className='bg-blue-900 text-white rounded-md  p-2'>

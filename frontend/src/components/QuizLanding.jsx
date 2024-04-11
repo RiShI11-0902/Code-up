@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from './Navbar'
-import { Navigate, useNavigate } from 'react-router-dom'
-import socketClient from "socket.io-client";
+import { useNavigate } from 'react-router-dom'
 import io from "socket.io-client";
 import { useSelector } from 'react-redux';
 import { RiLoader3Line } from "react-icons/ri";
 
 const socket = io.connect("/"); //http://localhost:8000
-
-
 
 const QuizLanding = () => {
 
@@ -38,9 +35,6 @@ const QuizLanding = () => {
     }
 
     const joinRoom = () => {
-
-        console.log(room);
-
         if (room == undefined) {
             alert("Please Enter Room")
         } else {
@@ -51,15 +45,8 @@ const QuizLanding = () => {
                 navigate("/quiz", { state: { roomDetails: details.room, player2: details.p2, questions: details.question, player1: details.p1, lang: lang } })
             })
         }
-
-        // console.log("Room is empty");
-        // alert("please enter a room first")
         setLang(" ")
     }
-
-
-
-
     return (
         <>
             <Navbar />

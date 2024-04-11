@@ -18,7 +18,8 @@ const socketIo = require("socket.io");
 
 const { Question } = require("./models/questions");
 const { Room } = require("./models/room");
-const end = 0;
+const { User } = require("./models/users");
+
 
 //calling passport and db
 initializePaasport(passport);
@@ -286,9 +287,6 @@ app.use("/user", userRoutes.route);
 const help = require("./routes/helper");
 app.use("/", help.route);
 
-// const __dirname = path.resolve()
-
-// app.use(express.static(path.join(__dirname,"/frontend/dist")))
 
 app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)));
 
@@ -296,8 +294,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.js"));
 });
 
-const questions = require("./routes/questions");
-const { User } = require("./models/users");
 
 app.use("/", (req, res) => {
   res.send("Working");

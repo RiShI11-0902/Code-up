@@ -36,8 +36,7 @@ const Navbar = () => {
           <div>
             <ul className="sm:flex space-x-5 font-bold hidden md:block md:flex md:items-center md:flex-row">
               <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
-              <li className="cursor-pointer">About</li>
-              <li className="cursor-pointer">Contact</li>
+              <Link to={"/about"} className="cursor-pointer" >About</Link>
               <li className="cursor-pointer" onClick={() => dispatch(logoutUserAsync())}>Log out</li>
               {/* <li>{ selectUser ? <Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link> : " " }</li>  */}
             </ul>
@@ -79,10 +78,8 @@ const Navbar = () => {
                 <div className=" absolute bg-green-200 rounded-3xl  w-72 translate-x-10 top-16 left-0 ">
                   <div className="nav-items my-4">
                     <ul className="flex flex-col space-y-5 items-center font-bold">
-                      <li>Everything's</li>
                       <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
-                      <li>Flowers</li>
-                      <li >Contact</li>
+                      <Link to={"/about"} className="cursor-pointer" >About</Link>
                       <li onClick={() => dispatch(logoutUserAsync())}>Log out</li>
                       {/* { selectUser ? <li><Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link></li> : " " } */}
                     </ul>

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import Navbar from './Navbar'
 
 const Leaderboard = () => {
 
@@ -27,6 +28,7 @@ const Leaderboard = () => {
 
     return (
         <>
+        <Navbar/>
             <div className='p-5 flex flex-row justify-evenly'>
                 <button onClick={(e) => setLang(e.target.value)} value={"HTML"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic border-2 border-blue-300  hover:bg-blue-600 '>HTML</button>
                 <button onClick={(e) => setLang(e.target.value)} value={"CSS"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic border-2 border-blue-300  hover:bg-blue-600 '>CSS</button>
