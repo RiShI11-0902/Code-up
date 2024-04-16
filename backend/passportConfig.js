@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 
 exports.initializePaasport = (passport) => {
   passport.use(
-    new localStrategy(async (username, password, next) => { // always take username and password only as the parameters nothing ele like email
+    new localStrategy(async (username, password, next) => { // always take username and password only as the parameters nothing else like email
       try {
         const findUser = await User.findOne({ username });
         if (!findUser) return next(null, false, {message: "Username Not Found!!!"}) ;

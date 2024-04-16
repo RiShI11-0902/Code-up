@@ -291,7 +291,7 @@ app.use("/", help.route);
 app.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.js"));
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 

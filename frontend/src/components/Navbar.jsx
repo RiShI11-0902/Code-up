@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <>
       {selectUser == null && <Navigate to={"/"} replace={true} ></Navigate>}
-      <div className="navbar flex items-center -ml-7 space-x-0 w-full mx-auto md:space-x-40 my-8">
+      <div className="navbar flex items-center -ml-7 space-x-0 w-full mx-auto md:space-x-40 my-8 mb-10 border-b-2 pb-8">
 
         <div className="left  w-full flex items-center justify-evenly flex-row">
           <div className="logo  ml-5  text-black  text-4xl font-bold ">
@@ -35,61 +35,27 @@ const Navbar = () => {
           </div>
           <div>
             <ul className="sm:flex space-x-5 font-bold hidden md:block md:flex md:items-center md:flex-row">
-              <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
-              <Link to={"/about"} className="cursor-pointer" >About</Link>
-              <li className="cursor-pointer" onClick={() => dispatch(logoutUserAsync())}>Log out</li>
-              {/* <li>{ selectUser ? <Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link> : " " }</li>  */}
+            <Link to={"/quiz-homepage"} className="cursor-pointer hover:text-blue-800" >Home</Link>
+              <Link to={"/leaderboard"} className="cursor-pointer hover:text-blue-800" >Leaderboard</Link>
+              <Link to={"/about"} className="cursor-pointer hover:text-blue-800" >About</Link>
+              <li className="cursor-pointer hover:text-blue-800" onClick={() => dispatch(logoutUserAsync())}>Log out</li>
             </ul>
           </div>
-          <div>
-            <div className="text-green-950 text-2xl font-extrabold cursor-pointer  flex flex-row space-x-4" >
-
-            </div>
-            {/* {
-              selectUser ?
-                <div className="flex flex-row space-x-5">
-                  <p>{selectUser.name} </p>
-                  <img onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)} src={user} className="w-10" alt="" /> <br />
-                  <div className="flex absolute top-20 right-44 text-lg font-semibold cursor-pointer flex-col">
-                    {
-                      isOpen ?
-                        options.map((i) => {
-                          return <div>
-                            <p className="" onClick={() => dispatch(logoutUserAsync())}>{i}</p>
-                          </div>
-                        })
-                        : " "
-                    }
-                  </div>
-                </div>
-                : <button className='bg-green-500 p-2.5 px-5 rounded-full' onClick={() => navigate("/login")}>Sign in</button>
-            } */}
-          </div>
         </div>
-
-
-
         <div className="right-mobile  sm:block md:hidden xl:hidden 2xl:hidden ">
           <div className="nav-items my-4">
             {
               toggle ? (
                 ""
               ) :
-                <div className=" absolute bg-green-200 rounded-3xl  w-72 translate-x-10 top-16 left-0 ">
+                <div className=" absolute bg-blue-200 rounded-3xl  w-72 translate-x-10 top-28 left-0 ">
                   <div className="nav-items my-4">
                     <ul className="flex flex-col space-y-5 items-center font-bold">
+                    <Link to={"/quiz-homepage"} className="cursor-pointer hover:text-blue-800" >Home</Link>
                       <Link to={"/leaderboard"} className="cursor-pointer" >Leaderboard</Link>
                       <Link to={"/about"} className="cursor-pointer" >About</Link>
                       <li onClick={() => dispatch(logoutUserAsync())}>Log out</li>
-                      {/* { selectUser ? <li><Link to={`/cart/${selectUser.id}`}><img className="w-9" src={bag}  /></Link></li> : " " } */}
                     </ul>
-                    {/* <div>
-                      {
-                        selectUser ?
-                          <span className="text-green-950 text-2xl font-extrabold"> Hello, {selectUser.name}</span>
-                          : <button className='bg-green-500 p-2.5 px-5 rounded-full' onClick={() => navigate("/login")}>Sign in</button>
-                      }
-                    </div> */}
                   </div>
                 </div>
             }

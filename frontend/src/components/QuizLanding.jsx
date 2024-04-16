@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useNavigate } from 'react-router-dom'
 import io from "socket.io-client";
 import { useSelector } from 'react-redux';
 import { RiLoader3Line } from "react-icons/ri";
+import Cookies from 'js-cookie';
 
 const socket = io.connect("/"); //http://localhost:8000
 
@@ -17,9 +18,18 @@ const QuizLanding = () => {
 
     const userId = useSelector(state => state.auth.loggedInUser.id)
 
+      const exitsCookie = Cookies.get("user")
+
+
+     useEffect(() => {
+    if (exitsCookie != undefined) {
+        // Cookies.set("user", sele)
+    }
+  }, [])
+
     const startQuiz = () => {
         console.log(lang);
-        if (lang == undefined) {
+        if (lang == undefined || lang == " ") {
             alert("Please select any one language")
         } else if (room != undefined) {
             alert("Please Join the room u have entered")
@@ -73,7 +83,7 @@ const QuizLanding = () => {
                     <div className='w-fit mx-auto mt-2 md:mx-40 '>
                         <p className='font-semibold text-black'>Don't have a room create one Now!! </p>
                         <button onClick={startQuiz} className='bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 rounded-xl mt-2'>
-                            {laoding && room == undefined ? < RiLoader3Line className='animate-spin' /> : "Start"}
+                            {laoding && room == undefined ? < RiLoader3Line className='animate-spin' /> : "Create Room"}
                         </button>
                     </div>
                 </div>
