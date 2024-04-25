@@ -18,7 +18,7 @@ const Leaderboard = () => {
         //   dispatch(findAllUser())
 
         const users = async () => {
-            const allUser = await axios.post("/user/allUser", { lang }) //http://localhost:8000
+            const allUser = await axios.post("/user/highscores", { lang }) //http://localhost:8000
             console.log(allUser.data.user);
             setUsers(allUser.data.user)
         }

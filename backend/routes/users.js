@@ -26,11 +26,14 @@ router
                 }
                 // Authentication successful, handle accordingly (e.g., redirect)
                 // res.status(200).json({ message: 'Login successful' }); // Send success message
-                res.status(200).json({ name: user.name, id: user.id });
+                // res.status(200).json({ name: user.name, id: user.id });
+                return res.cookie('user', {id:user.id, name:user.name}, {httpOnly: true}).status(200).json({ name: user.name, id: user.id });
+
             });
         })(req, res, next)})
     .get("/logout", userController.logout )
-    .post("/allUser", userController.findUser)
+    .post("/highscores", userController.highscores)
+    .get("/checkuser", userController.checkUser)
     
 exports.route = router
 

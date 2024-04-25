@@ -8,7 +8,10 @@ const Protected = ({children}) => {
     const user = useSelector(state => state.auth.loggedInUser)
 
     const exitsCookie = Cookies.get("connect.sid")
-    if ( !user && !exitsCookie ) {
+    console.log(exitsCookie);
+
+    if ( !user ) {
+      console.log(exitsCookie);
         return <Navigate to={"/"} replace="true" ></Navigate>
     }
 

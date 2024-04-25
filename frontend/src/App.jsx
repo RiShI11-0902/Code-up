@@ -6,7 +6,7 @@ import Register from './components/Register'
 import QuizLanding from './components/QuizLanding'
 import Protected from './components/Protected'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { checkUserAsync } from '../store/reducers/authReducer'
 import QuizPage from './components/QuizPage'
 import Leaderboard from './components/Leaderboard'
@@ -15,10 +15,17 @@ function App() {
 
   const dispatch = useDispatch()
 
+  const user = useSelector(state => state.auth.loggedInUser)
+
   useEffect(() => {
-   dispatch(checkUserAsync())
-  }, [])
+
+   
+    dispatch(checkUserAsync())
+
+  }, [dispatch])
+
   
+
 
   return (
     <>
@@ -27,10 +34,10 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/quiz-homepage' element={ <Protected><QuizLanding /></Protected> } />
-          <Route path='/quiz' element={ <Protected><QuizPage /></Protected> } />
-          <Route path='/leaderboard' element={<Leaderboard/>} />
-          <Route path='/about' element={<About/>} />
+          <Route path='/quiz-homepage' element={<Protected><QuizLanding /></Protected>} />
+          <Route path='/quiz' element={<Protected><QuizPage /></Protected>} />
+          <Route path='/leaderboard' element={<Leaderboard />} />
+          <Route path='/about' element={<About />} />
         </Routes>
       </Router>
     </>

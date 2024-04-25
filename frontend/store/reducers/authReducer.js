@@ -35,9 +35,10 @@ export const logoutUserAsync = createAsyncThunk(
 
 export const checkUserAsync = createAsyncThunk(
     "user/checkuser",
-    async (userdata) =>{
-        const res = await checkuser(userdata)
-        return res.data
+    async () =>{
+        const res = await checkuser()
+        console.log(res);
+        return res
     }
 )
 
@@ -69,7 +70,16 @@ export const authReducer = createSlice({
             console.log();
         });
         builder.addCase(checkUserAsync.fulfilled, (state, action) => {
+            console.log(action.payload);
             state.loggedInUser = action.payload;
+            // state.loggedInUser = actio;
+
+        });
+        builder.addCase(checkUserAsync.rejected, (state, action) => {
+            // console.log(action.payload);
+            state.loggedInUser = null;
+            // state.loggedInUser = actio;
+
         });
         builder.addCase(logoutUserAsync.fulfilled, (state, action) => {
             state.loggedInUser = null;

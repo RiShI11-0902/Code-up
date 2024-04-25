@@ -48,11 +48,6 @@ io.on("connection", (socket) => {
       { $sample: { size: 10 } }, // Retrieve 10 random documents
     ]);
 
-    console.log("second" + question);
-
-    console.log(findRoom.player1.name);
-    console.log(data.room);
-
     if (findRoom && findUser) {
       findRoom.player2 = data.userId;
       await findRoom.save();
@@ -109,23 +104,6 @@ io.on("connection", (socket) => {
       const findLang = await Room.findById(data.roomId);
 
       const p1 = await User.findById(data.p1._id);
-      // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-
-      // if (p1.score_history.length == 0) {
-      //   p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-      // } else {
-      //   p1.score_history.map((val) => {
-      //     if (val.topic == findLang.lang) {
-      //       console.log("Exits");
-      //        val.score = data.player_1
-      //        return
-      //     } else {
-      //       console.log("Don't exits");
-      //       p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-      //       return
-      //     }
-      //   });
-      // }
 
       if (p1.score_history.length == 0) {
         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
@@ -133,13 +111,11 @@ io.on("connection", (socket) => {
         let topicExists = false;
         p1.score_history.forEach((val) => {
           if (val.topic === findLang.lang) {
-            console.log("Exists");
             val.score = data.player_1;
             topicExists = true;
           }
         });
         if (!topicExists) {
-          console.log("Doesn't exist");
           p1.score_history.push({ score: data.player_1, topic: findLang.lang });
         }
       }
@@ -148,23 +124,6 @@ io.on("connection", (socket) => {
       await p1.save();
 
       const p2 = await User.findById(data.p2._id);
-      // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-
-      // if (p2.score_history.length == 0) {
-      //   p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-      // } else {
-      //   p2.score_history.map((val) => {
-      //     if (val.topic == findLang.lang) {
-      //       console.log("Exits");
-      //        val.score = data.player_2
-      //        return;
-      //     } else {
-      //       console.log("Don't exits");
-      //       p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-      //       return;
-      //     }
-      //   });
-      // }
 
       if (p2.score_history.length == 0) {
         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
@@ -191,46 +150,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("closeGame", async (data) => {
-    console.log("Closed");
-    console.log(data);
-
-    //   const findLang = await Room.findById(data.roomId);
-
-    //   const p1 = await User.findById(data.p1._id);
-    //   // p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-
-    //   if (p1.score_history.length == 0) {
-    //     p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-    //   }else{
-    //     p1.score_history.map((val)=>{
-    //       if (val.topic == findLang.lang) {
-    //        val.score = data.player_1
-    //       }else{
-    //         p1.score_history.push({ score: data.player_1, topic: findLang.lang });
-    //       }
-    //     })
-    //   }
-
-    //  await p1.save();
-
-    //   const p2 = await User.findById(data.p2._id);
-    //   // p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-
-    //   if (p2.score_history.length == 0) {
-    //     p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-    //   }else{
-    //     p2.score_history.map((val)=>{
-    //       if (val.topic == findLang.lang) {
-    //        val.score = data.player_2
-    //       }else{
-    //         p2.score_history.push({ score: data.player_2, topic: findLang.lang });
-    //       }
-    //     })
-    //   }
-
-    //  await p2.save();
-
-    //  const delRoom =  await Room.findByIdAndDelete(data.roomId)
+   
     console.log("deleted");
   });
 

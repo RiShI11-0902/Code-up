@@ -28,7 +28,7 @@ export const loginUser = async (data) => {
     if (response.status == 200) {
       const res = response;
       console.log(res);
-      return res;
+      return res.data;
     }  else {
       console.log("errorrrr");
     }
@@ -45,16 +45,15 @@ export const loginUser = async (data) => {
  
 };
 
-export const checkuser = async (data) => {
+export const checkuser = async () => {
   try {
-    const res = axios.get("/checkuser", data); //http://localhost:8000
-    if (res.ok) {
-      const response = await res;
+    const response = await axios.get("http://localhost:8000/user/checkuser"); //http://localhost:8000
+    if (response.status == 200) {
+      console.log(response);
       return response;
     }
   } catch (error) {
-    const err = await res;
-    return err;
+    return error;
   }
 };
 

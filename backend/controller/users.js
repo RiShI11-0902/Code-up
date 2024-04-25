@@ -1,6 +1,6 @@
 const model = require("../models/users");
 const User = model.User;
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 exports.createUser = async (req, res) => {
   try {
@@ -10,11 +10,11 @@ exports.createUser = async (req, res) => {
 
     if (exits) {
       req.flash("error", "Email Already Exits!!");
-      return res.status(401).json({ flashMessages: req.flash('error') }); // Send flash messages in response
+      return res.status(401).json({ flashMessages: req.flash("error") }); // Send flash messages in response
     } else {
       const user = new User();
 
-      const hashedPassword = bcrypt.hashSync(password.toString(),10)
+      const hashedPassword = bcrypt.hashSync(password.toString(), 10);
       user.name = name;
       user.username = username;
       user.password = hashedPassword;
@@ -31,7 +31,6 @@ exports.createUser = async (req, res) => {
     //     if(err) return res.json({error: err})
     //     res.status(201).json({id: user._id, name: user.name});
     // })
-   
   } catch (error) {
     console.log(error);
   }
@@ -46,7 +45,8 @@ exports.loginUser = (req, res) => {
   //   return res.status(401).json({ message: err});
   // }else{
   // }
-  return res.status(200).json({ name: user.name, id: user.id });
+  // return res.status(200).json({ name: user.name, id: user.id });
+  return res.cookies("user", user.id, { httpOnly: true });
 
   // console.log(req.body.name);
 };
@@ -58,7 +58,7 @@ exports.logout = (req, res, next) => {
   });
 };
 
-exports.findUser = async (req, res) => {
+exports.highscores = async (req, res) => {
   // console.log(req.body);
 
   try {
@@ -87,15 +87,7 @@ exports.findUser = async (req, res) => {
         }
       }
     });
-    // scoreHistory.forEach((val) => {
-    //   if (val.topic == lang) {
-    //     // const score = parseInt(val.score);
-    //     // if (score > highScore) {
-    //     //   highScore = score;
-    //     // }
-    //     console.log(val.topic);
-    //   }
-    // });
+
     return highScore;
   }
 
@@ -114,4 +106,19 @@ exports.findUser = async (req, res) => {
   // user.score_history.map((topic)=>{
   //   console.log(topic.score);
   // })
+};
+
+exports.checkUser = async (req, res) => {
+  if (req.user) {
+    const { id } = req.user;
+    try {
+      const user = await User.findById(id);
+      console.log("Refreshh");
+      return res.status(200).json({ id: user.id, name: user.name });
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    res.sendStatus(401);
+  }
 };
