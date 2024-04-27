@@ -22,6 +22,7 @@ exports.initializePaasport = (passport) => {
   passport.deserializeUser(async (id, next) => {
     try {
       const user = await User.findById(id);
+      console.log("okkkkkkkkkkkkkkkkkk");
       return next(null, user);
     } catch (error) {
       return next(error, false);
@@ -31,7 +32,8 @@ exports.initializePaasport = (passport) => {
 
 exports.isAuthenticated = (req,res,next)=>{
   if (req.user) {
-    return next()
+   return next()
+  }else{
+    return res.send(401)
   }
-  res.send(401)
 }

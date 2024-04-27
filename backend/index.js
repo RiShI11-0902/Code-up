@@ -22,7 +22,7 @@ const { User } = require("./models/users");
 
 
 //calling passport and db
-initializePaasport(passport);
+// initializePaasport(passport);
 connection();
 
 //middleware
@@ -160,7 +160,6 @@ io.on("connection", (socket) => {
     const room = await Room.findById(data.roomId);
 
     if (data.userId == room.player1._id && data.correct == true) {
-      console.log("ans by  player 1");
       room.score_p1 += 1;
       room.save();
       io.to(room.id).emit("correct_ans", {
@@ -169,7 +168,6 @@ io.on("connection", (socket) => {
         p2: room.score_p2,
       });
     } else if (data.userId == room.player2._id && data.correct == true) {
-      console.log("ans by  player 1");
       room.score_p2 += 1;
       room.save();
       io.to(room.id).emit("correct_ans", {
@@ -199,6 +197,9 @@ app.use(
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+initializePaasport(passport);
+
 
 //individual routes
 const userRoutes = require("./routes/users");

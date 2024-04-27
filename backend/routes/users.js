@@ -3,13 +3,10 @@ const router = express.Router()
 const userController = require("../controller/users")
 // const { Passport } = require("passport")
 const passport = require("passport")
+const { isAuthenticated } = require("../passportConfig")
 
 router
-    .post("/createuser", userController.createUser)
-    // .post("/loginuser", passport.authenticate("local", {failureFlash:true}, (req,res,next)=>{
-    //     console.log(req.body);
-
-    // } ) ,  userController.loginUser)  
+    .post("/createuser", userController.createUser)  
     .post("/loginuser", (req, res, next) => {
         passport.authenticate('local', { failureFlash: true }, (err, user, info) => {
             if (err) {
@@ -24,16 +21,13 @@ router
                 if (err) {
                     return next(err);
                 }
-                // Authentication successful, handle accordingly (e.g., redirect)
-                // res.status(200).json({ message: 'Login successful' }); // Send success message
-                // res.status(200).json({ name: user.name, id: user.id });
-                return res.cookie('user', {id:user.id, name:user.name}, {httpOnly: true}).status(200).json({ name: user.name, id: user.id });
-
+                return res.status(200).json({ name: user.name, id: user.id });
             });
         })(req, res, next)})
     .get("/logout", userController.logout )
     .post("/highscores", userController.highscores)
-    .get("/checkuser", userController.checkUser)
+    .post("/checkuser", userController.checkUser)
+
     
 exports.route = router
 

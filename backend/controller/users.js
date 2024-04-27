@@ -109,16 +109,20 @@ exports.highscores = async (req, res) => {
 };
 
 exports.checkUser = async (req, res) => {
-  if (req.user) {
-    const { id } = req.user;
-    try {
-      const user = await User.findById(id);
-      console.log("Refreshh");
-      return res.status(200).json({ id: user.id, name: user.name });
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    res.sendStatus(401);
+  
+  const { id } = req.body
+
+  console.log( " refresh " + id);
+
+  const user = await User.findById(id)
+
+  if (user) {
+    return res.json({name:user.name, id:user.id})
+  }else{
+    return res.status(401)
   }
+
+ 
+
+  
 };
