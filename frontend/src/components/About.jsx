@@ -1,44 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from './Navbar'
-
+import { pic1 } from '../assets'
+import { FaGithub } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa6";
+import { FaLinkedin } from "react-icons/fa";
+import {motion} from 'framer-motion'
 const About = () => {
-    return (
-        <>
-        <Navbar/>
-            <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">About Our Multiplayer Quiz App</h1>
-      <p className="text-lg mb-6">
-        Welcome to our multiplayer quiz app! We're thrilled to have you here. Our app is designed to provide an engaging and competitive experience for players of all ages. Whether you're a trivia enthusiast or just looking for some fun, our app has something for everyone.
-      </p>
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">What Makes Us Unique</h2>
-        <ul className="list-disc list-inside">
-          <li className="mb-2">Real-Time Multiplayer Gameplay</li>
-          <li className="mb-2">Diverse Categories</li>
-          <li className="mb-2">Dynamic Question Database</li>
-          <li className="mb-2">Social Features</li>
-        </ul>
+
+  const [down, setDown] = useState(false)
+
+  return (
+    <>
+
+      <div className='bg-gradient-to-r   from-violet-600 to-indigo-600 h-screen'>
+
+        <div onClick={() => setDown(!down)}>
+          <Navbar />
+        </div>
+        
+
+        <div className={`relative ${down ? 'top-40' : ""}  `}>
+          <div className='w-fit mx-auto xl:mx-20'>
+            <motion.img initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='w-80 rounded-2xl md:w-[40rem]' src={pic1} alt="" />
+          </div>
+          <p className={`font-bold text-5xl text-white uppercase -mt-5 absolute top-52 left-10 md:top-[26rem] md:left-40 md:text-7xl xl:top-28 2xl:top-16 xl:left-[40rem] xl:text-6xl tracking-widest`}>About Us</p>
+          <div className={`flex flex-col items-center  p-9 mx-auto w-fit  right-0 top-[15rem] md:w-[80%] md:top-[30rem] xl:w-[40%] 2xl:w-[47%] absolute md:right-20 xl:top-24 text-lg text-black  ${down ? 'bg-gradient-to-r  from-violet-600 to-indigo-600' : ""} `}>
+            
+            <motion.p initial={{ y: -800 }} animate={{ y: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className={`  md:text-4xl xl:text-3xl 2xl:text-3xl  `}>
+            We're dedicated to revolutionizing the way you learn and have fun. Our app offers a unique blend of education and entertainment, providing an engaging platform for players of all ages to expand their knowledge while competing with friends and fellow enthusiasts.
+            </motion.p>
+            <div className={`  mt-5  flex flex-col items-center`}>
+              <p className={`  text-black text-xl font-bold `}>Contact us on</p>
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='flex flex-row mt-3 rounded-2xl w-fit space-x-5 mx-auto p-5 bg-white'>
+                <div> <a target='_blank' href="https://github.com/RiShI11-0902"><FaGithub /></a> </div>
+                <div> <a target='_blank' href="https://www.instagram.com/rishi_codes/"><FaInstagram/></a> </div>
+                <div> <a target='_blank' href="https://www.linkedin.com/in/rushikesh-bagade11"><FaLinkedin/></a> </div>
+              </motion.div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
-      <h2 className="text-2xl font-semibold mb-2">How to Play</h2>
-      <ol className="list-decimal list-inside mb-6">
-        <li className="mb-2">Sign Up or Log In</li>
-        <li className="mb-2">Choose a Quiz</li>
-        <li className="mb-2">Answer Questions</li>
-        <li className="mb-2">Compete and Win</li>
-        <li className="mb-2">Climb the Leaderboard</li>
-      </ol>
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
-        <p className="text-lg">
-          Have questions, feedback, or suggestions? We'd love to hear from you! Feel free to reach out to our support team at <a href="mailto:rbagade911@gmail.com" className="text-blue-500 hover:underline">rbagade911@gmail.com</a> with any inquiries.
-        </p>
-        <p className='text-lg'>
-            Or Contribute to us, here: <a href="https://github.com/RiShI11-0902/Code-up"> <span className='text-blue-500 font-bold'>Github Link</span></a>
-        </p>
-      </div>
-    </div>
-        </>
-    )
+
+    </>
+  )
 }
 
 export default About

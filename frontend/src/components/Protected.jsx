@@ -1,17 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import Cookies from 'js-cookie';
 
 const Protected = ({children}) => {
 
-    const user = useSelector(state => state.auth.loggedInUser)
+    let user = useSelector(state => state.auth.loggedInUser)
 
-    const exitsCookie = Cookies.get("connect.sid")
-    console.log(exitsCookie);
+    const exits = localStorage.getItem('user')
 
-    if ( !user ) {
-      console.log(exitsCookie);
+    console.log(exits);
+
+    if ( !user  ) {
+      console.log(exits);
         return <Navigate to={"/"} replace="true" ></Navigate>
     }
 
