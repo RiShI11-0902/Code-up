@@ -64,14 +64,28 @@ exports.highscores = async (req, res) => {
   try {
     const user = await User.find();
 
-    user.sort((a, b) => {
-      const aHighestScore = getHighScore(a.score_history, req.body.lang);
-      const bHighScore = getHighScore(b.score_history, req.body.lang);
-      return bHighScore - aHighestScore;
-    });
+    const userfilter = user
+      .filter((user) => {
+        return user.score_history.some(
+          (score) => score.topic === req.body.lang
+        );
+      })
+      .sort((a, b) => {
+        const aHighestScore = getHighScore(a.score_history, req.body.lang);
+        const bHighScore = getHighScore(b.score_history, req.body.lang);
+        return bHighScore - aHighestScore;
+      });
+
+    console.log(userfilter);
+
+    // user.sort((a, b) => {
+    //   const aHighestScore = getHighScore(a.score_history, req.body.lang);
+    //   const bHighScore = getHighScore(b.score_history, req.body.lang);
+    //   return bHighScore - aHighestScore;
+    // });
 
     // console.log(user);
-    res.json({ user: user });
+    res.json({ user: userfilter });
   } catch (error) {
     console.log(error);
   }
@@ -80,7 +94,7 @@ exports.highscores = async (req, res) => {
     let highScore = 0;
     scoreHistory.map((val) => {
       if (val.topic == lang) {
-        console.log(val.topic);
+        // console.log(val.topic);
         const score = parseInt(val.score);
         if (score > highScore) {
           highScore = score;
@@ -109,20 +123,15 @@ exports.highscores = async (req, res) => {
 };
 
 exports.checkUser = async (req, res) => {
-  
-  const { id } = req.body
+  const { id } = req.body;
 
-  console.log( " refresh " + id);
+  console.log(" refresh " + id);
 
-  const user = await User.findById(id)
+  const user = await User.findById(id);
 
   if (user) {
-    return res.json({name:user.name, id:user.id})
-  }else{
-    return res.status(401)
+    return res.json({ name: user.name, id: user.id });
+  } else {
+    return res.status(401);
   }
-
- 
-
-  
 };

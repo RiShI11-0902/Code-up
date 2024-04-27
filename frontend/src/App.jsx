@@ -11,21 +11,29 @@ import { checkUserAsync } from '../store/reducers/authReducer'
 import QuizPage from './components/QuizPage'
 import Leaderboard from './components/Leaderboard'
 import About from './components/About'
+import axios from 'axios'
+
 function App() {
 
   const dispatch = useDispatch()
 
-  const user = useSelector(state => state.auth.loggedInUser)
+
+  let user = useSelector(state => state.auth.loggedInUser?.id)
+
+// const [exitsUser, setExitsUser] = useState()
+  // useEffect(() => {
+  //   dispatch(checkUserAsync())
+  // }, [dispatch])
 
   useEffect(() => {
+    const exits = localStorage.getItem('user')
 
-   
-    dispatch(checkUserAsync())
-
+    if (exits) {
+     
+       dispatch(checkUserAsync(exits))
+     
+    }
   }, [dispatch])
-
-  
-
 
   return (
     <>
