@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { RiLoader3Line } from "react-icons/ri";
 import {motion} from 'framer-motion'
-const socket = io.connect("http://localhost:8000"); //http://localhost:8000
+const socket = io.connect("/"); //http://localhost:8000
 
 const QuizPage = () => {
 

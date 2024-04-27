@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 import { checkUserAsync } from '../../store/reducers/authReducer';
 // import Cookies from 'js-cookie';
 import axios from 'axios';
-const socket = io.connect("http://localhost:8000"); //http://localhost:8000
+const socket = io.connect("/"); //http://localhost:8000
 
 const QuizLanding = () => {
 

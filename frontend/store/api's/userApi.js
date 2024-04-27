@@ -20,7 +20,7 @@ export const createUser = async (data) => {
 export const loginUser = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/user/loginuser",
+      "/user/loginuser",
       data
     ); //http://localhost:8000
     // return response
@@ -43,7 +43,7 @@ export const loginUser = async (data) => {
 };
 
 export const checkAuth = async ()=>{
-  const response =  axios.get("http://localhost:8000/user/checkuser")
+  const response =  axios.get("/user/checkuser")
   console.log(response);
 }
 
@@ -59,7 +59,7 @@ export const logout = async (data) => {
 export const checkUser = async (id) => {
   
   const response = await axios.post(
-    "http://localhost:8000/user/checkuser", {id:id}
+    "/user/checkuser", {id:id}
   ); //http://localhost:8000
   // return response
   // console.log(response);
