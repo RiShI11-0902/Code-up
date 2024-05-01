@@ -146,6 +146,8 @@ io.on("connection", (socket) => {
       await p2.save();
 
       io.to(data.roomId).emit("gameOver");
+
+      const room = await Room.findByIdAndDelete(data.roomId)
     }
   });
 
