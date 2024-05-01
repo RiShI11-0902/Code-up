@@ -22,13 +22,13 @@ const HomePage = () => {
     }, [])
     return (
         <>
-            <div className='flex flex-col  md:w-full    md:flex-row '>
+            <div className='flex flex-col  md:w-full  md:h-screen  md:flex-col lg:flex-row xl:flex-row 2xl:flex-row '>
                 <p className='absolute text-white top-5 left-10 text-3xl font-extrabold'>
                     <div className="logo    text-4xl font-bold ">
                         code<sup className="text-sm">Up</sup>.
                     </div>
                 </p>
-                <div className='  bg-blue-950  min-h-screen  md:w-[60%] '>
+                <div className='  bg-blue-950  min-h-screen md:w-full lg:w-[60%]  2xl:w-[60%] '>
                     <div className=' mt-10 p-10 md:p-0 md:mt-60 md:ml-20'>
                         <h1 className="text-2xl md:text-4xl font-bold text-left mb-4 text-white">Welcome to the Quiz App!</h1>
                         <p className=" mb-4 text-white text-left md:w-[40rem] md:text-xl font-semibold">"Discover, compete, and connect 
@@ -38,7 +38,7 @@ const HomePage = () => {
                         </div>
                     </div>
                 </div>
-                <div className=' md:bg-blue-400 -mt-40 md:mt-0 ml-10 md:ml-0 md:w-[40%] md:p-36 '>
+                <div className=' xl:bg-blue-400 lg:bg-blue-400 -mt-40 sm:mt-0 md:-mt-[60rem] lg:mt-0 xl:mt-0 2xl:-mt-16 ml-10 md:ml-0 lg:w-[40%] xl:w-[40%] xl:p-36 '>
                     <Login />
                 </div>
             </div>

@@ -41,12 +41,12 @@ const Login = () => {
     <>
       {selectUser && <Navigate to={"/quiz-homepage"} replace={true} ></Navigate>}
       <div>
-        <section className="-mt-36 -ml-10 dark:bg-gray-900">
+        <section className="-mt-36 sm:mt-0 lg:-mt-20 -ml-10 dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <a href="#" className="flex items-center mb-6 text-2xl font-semibold md:text-gray-900 text-white">
               {flag ? "Register Now" : " Login your account"}
             </a>
-            <div className="md:w-[70rem] bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="xl:w-[70rem] md:w-[90%] bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 {
                   flag ? <form onSubmit={handleSubmit((data) => {

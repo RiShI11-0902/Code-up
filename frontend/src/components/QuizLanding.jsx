@@ -69,9 +69,6 @@ const QuizLanding = () => {
 
             <div className='bg-gradient-to-r from-violet-600 to-indigo-600'>
                 <Navbar />
-
-               
-
                 <div className="buttons w-full h-screen  bg-gradient-to-r from-violet-600 to-indigo-600 min-h-full ">
                     {
                         show == null ? <div className='question flex flex-col md:flex-row xl:flex-row 2xl:flex-row md:space-x-5 mt-10 md:mt-0'>
@@ -89,8 +86,8 @@ const QuizLanding = () => {
 
 
                     {
-                        show ? <div className='flex flex-col mt-20 items-center question'>
-                            <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='font-extrabold text-xl'>Select your Language</motion.p>
+                        show ? <div className='flex flex-col mt-20 md:mt-0 items-center question'>
+                            <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='font-extrabold text-xl md:text-lg 2xl:text-3xl'>Select your Language</motion.p>
                             <motion.div initial={{ x: -200 }} animate={{ x: 1 }} transition={{ duration: 1, ease: 'easeIn' }} className="buttons w-fit md:mx-20 flex flex-row mx-auto mt-5">
                                 <button onClick={(event) => setLang(event.target.value)} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" value="HTML">HTML</button>
                                 <button onClick={(event) => setLang(event.target.value)} type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" value="CSS">CSS</button>
@@ -101,18 +98,18 @@ const QuizLanding = () => {
                                     {laoding && room == undefined ? < RiLoader3Line className='animate-spin' /> : "Create Room"}
                                 </motion.button>
                             </div>
-                            <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='mt-5 font-extrabold text-white text-2xl' onClick={() => setShow(false)}> or Join One</motion.button>
+                            <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='mt-5 font-extrabold text-white text-2xl md:text-3xl 2xl:text-4xl hover:text-cyan-400' onClick={() => setShow(false)}> or Join One</motion.button>
                         </div> : (show == null ? "" :
                             <div className='question flex flex-col items-center'>
 
                                 <motion.div initial={{ x: -200 }} animate={{ x: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='w-fit  mx-auto md:mx-40 mt-5 flex flex-col md:flex-row md:space-x-6 items-center indent-5'>
                                     <input className='px-4 h-12 my-2 border rounded-lg border-1 border-gray-300 outline-blue-500' type="text" placeholder='Enter your Room' onChange={(event) => setRoom(event.target.value)} />
-                                    <motion.button initial={{ x: -200 }} animate={{ x: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='border font-bold border-black hover:bg-white border-2 p-2 rounded-2xl' onClick={joinRoom} >
+                                    <motion.button initial={{ x: -200 }} animate={{ x: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className=' border-2 p-2 rounded-2xl bg-yellow-100 hover:bg-lime-200 border border-black text-black font-bold p-4 px-10 ' onClick={joinRoom} >
                                         {laoding && room != undefined ? < RiLoader3Line className='animate-spin' /> : "Join Room"}
                                     </motion.button>
                                 </motion.div>
 
-                                <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='mt-5 font-extrabold text-white text-2xl' onClick={() => setShow(true)}> or Create One</motion.button>
+                                <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} className='mt-5 font-extrabold text-white text-2xl hover:text-cyan-400 md:text-3xl 2xl:text-4xl' onClick={() => setShow(true)}> or Create One</motion.button>
                             </div>)
                     }
 

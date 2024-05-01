@@ -20,7 +20,7 @@ export const createUser = async (data) => {
 export const loginUser = async (data) => {
   try {
     const response = await axios.post(
-      "/user/loginuser",
+      "http://localhost:8000/user/loginuser",
       data
     ); //http://localhost:8000
     // return response
