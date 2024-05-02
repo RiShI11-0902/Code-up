@@ -13,7 +13,7 @@ const Leaderboard = () => {
     useEffect(() => {
 
         const users = async () => {
-            const allUser = await axios.post("http://localhost:8000/user/highscores", { lang }) //http://localhost:8000
+            const allUser = await axios.post("/user/highscores", { lang }) //http://localhost:8000
             setLoading(true)
             console.log(allUser.data.user);
             setUsers(allUser.data.user)
