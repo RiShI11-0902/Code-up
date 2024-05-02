@@ -27,7 +27,6 @@ const QuizPage = () => {
 
   const location = useLocation()
 
-
   const questions = location?.state?.questions
   const p1 = location?.state?.player1
   const p2 = location?.state?.player2
