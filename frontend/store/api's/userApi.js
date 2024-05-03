@@ -62,7 +62,7 @@ export const checkUser = async (id) => {
     "/user/checkuser", {id:id}
   ); //http://localhost:8000
   // return response
-  // console.log(response);
+  
   if (response.status == 200) {
     const res = response;
     console.log(res);
