@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const exits = localStorage.getItem('user')
-    if (exits && user) {
+    if (exits) {
        dispatch(checkUserAsync(exits))
     }
   }, [dispatch])
