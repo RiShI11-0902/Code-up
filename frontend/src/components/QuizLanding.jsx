@@ -67,9 +67,9 @@ const QuizLanding = () => {
     return (
         <>
 
-            <div className='bg-gradient-to-r from-violet-600 to-indigo-600'>
+            <div className=' h-fit bg-gradient-to-r  from-sky-100 to-indigo-200'>
                 <Navbar />
-                <div className="buttons w-full h-screen  bg-gradient-to-r from-violet-600 to-indigo-600 min-h-full ">
+                <div className="buttons w-full h-screen  bg-gradient-to-r  from-sky-100 to-indigo-200 min-h-full ">
                     {
                         show == null ? <div className='question flex flex-col md:flex-row xl:flex-row 2xl:flex-row md:space-x-5 mt-10 md:mt-0'>
 

@@ -26,7 +26,7 @@ const Leaderboard = () => {
     return (
         <>
 
-            <div className='bg-gradient-to-r h-screen from-violet-600 to-indigo-600'>
+            <div className='bg-gradient-to-r h-screen from-sky-100 to-indigo-200'>
                 <Navbar />
                 <div className='p-5 flex flex-row justify-evenly '>
                     <button onClick={(e) => setLang(e.target.value)} value={"HTML"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic font-extrabold border-2 border-blue-300  hover:bg-blue-600 '>HTML</button>
@@ -34,7 +34,7 @@ const Leaderboard = () => {
                     <button onClick={(e) => setLang(e.target.value)} value={"JavaScript"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic font-extrabold border-2 border-blue-300 ml-4 hover:bg-blue-600 '>JAVASCRIPT</button>
                 </div>
 
-                <div className="container mx-auto px-4 py-8 bg-gradient-to-r  from-violet-600 to-indigo-600">
+                <div className="container mx-auto px-4 py-8 bg-gradient-to-r h-fit from-sky-100 to-indigo-200">
                     <h2 className=" text-2xl font-bold mb-4">Top Scorers in  <span className='font-extrabold text-blue-800 text-3xl'>{lang}</span></h2>
 
                 {
