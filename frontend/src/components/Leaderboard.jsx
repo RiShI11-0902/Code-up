@@ -1,80 +1,87 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import Navbar from './Navbar'
-import { motion } from 'framer-motion'
-import { RiLoader3Line } from 'react-icons/ri'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import { motion } from "framer-motion";
+import { RiLoader3Line } from "react-icons/ri";
+
 const Leaderboard = () => {
+  const [users, setUsers] = useState([]);
+  const [lang, setLang] = useState("HTML");
+  const [loading, setLoading] = useState(true);
 
-    const [users, setUsers] = useState([])
-    const [lang, setLang] = useState("HTML")
-    const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.post("http://localhost:8000/user/highscores", { lang });
+        setUsers(response.data.user);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false);
+    };
+    fetchUsers();
+  }, [lang]);
 
-    useEffect(() => {
+  return (
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-300">
+      <Navbar />
 
-        const users = async () => {
-            const allUser = await axios.post("/user/highscores", { lang }) //http://localhost:8000
-            setLoading(true)
-            console.log(allUser.data.user);
-            setUsers(allUser.data.user)
-            setLoading(false)
-        }
-        users()
-    }, [lang])
+      {/* Language Selection Buttons */}
+      <div className="flex justify-center gap-4 py-6">
+        {["HTML", "CSS", "JavaScript"].map((item) => (
+          <button
+            key={item}
+            onClick={() => setLang(item)}
+            className={`px-4 py-2 rounded-lg font-semibold border-2 transition-all duration-300 
+                        ${
+                          lang === item
+                            ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                            : "border-blue-300 hover:bg-blue-500 hover:text-white"
+                        }`}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
 
+      {/* Leaderboard Section */}
+      <div className="container mx-auto px-6 py-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Top Scorers in <span className="text-blue-800">{lang}</span>
+        </h2>
 
-    return (
-        <>
-
-            <div className='bg-gradient-to-r h-screen from-sky-100 to-indigo-200'>
-                <Navbar />
-                <div className='p-5 flex flex-row justify-evenly '>
-                    <button onClick={(e) => setLang(e.target.value)} value={"HTML"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic font-extrabold border-2 border-blue-300  hover:bg-blue-600 '>HTML</button>
-                    <button onClick={(e) => setLang(e.target.value)} value={"CSS"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic font-extrabold border-2 border-blue-300  hover:bg-blue-600 '>CSS</button>
-                    <button onClick={(e) => setLang(e.target.value)} value={"JavaScript"} className='px-2 p-1 rounded-tr-lg rounded-bl-lg hover:text-white hover:italic font-extrabold border-2 border-blue-300 ml-4 hover:bg-blue-600 '>JAVASCRIPT</button>
+        {/* Loader */}
+        {loading ? (
+          <RiLoader3Line className="animate-spin text-blue-600 mx-auto text-5xl mt-10" />
+        ) : (
+          <div className="max-w-4xl mx-auto grid gap-6">
+            {users.map((user, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="bg-white/80 backdrop-blur-md rounded-lg shadow-lg p-6 flex justify-between items-center"
+              >
+                <span className="text-lg font-semibold">{user.name}</span>
+                <div className="flex flex-col text-right">
+                  {user.score_history.map((topic, i) =>
+                    lang === topic.topic ? (
+                      <div key={i}>
+                        <p className="text-gray-700 font-medium">{topic.topic}</p>
+                        <p className="text-3xl font-bold text-blue-600">{topic.score}</p>
+                      </div>
+                    ) : null
+                  )}
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-                <div className="container mx-auto px-4 py-8 bg-gradient-to-r h-fit from-sky-100 to-indigo-200">
-                    <h2 className=" text-2xl font-bold mb-4">Top Scorers in  <span className='font-extrabold text-blue-800 text-3xl'>{lang}</span></h2>
-
-                {
-                    loading ? <RiLoader3Line className='animate-spin mt-5 w-[30%]  mx-auto' /> : <div className="grid grid-cols-1 w-fit mx-auto backdrop-blur-md  gap-4 ">
-                    {users.map((user, index) => (
-                        <motion.div initial={{ x: -800 }} animate={{ x: 1 }} transition={{ duration: 1, ease: 'easeInOut' }} key={index} className="bg-gradient-to-r from-violet-400 to-blue-500 w-fit rounded shadow p-4">
-                            <div className="flex justify-between space-x-10 px-5 md:px-10 w-full md:w-[90%] mx-auto items-center mb-2 ">
-                                <span className="font-bold uppercase">{user.name}</span>
-
-                                <span className="text-gray-600">
-                                    {
-                                        user.score_history.map((topic) => {
-                                            return <div className='flex flex-row space-x-10 items-center'>
-
-                                                <p className='text-lg font-semibold'>
-                                                    {
-                                                        lang == topic.topic ? topic.topic : " "
-                                                    }
-                                                </p>
-                                                <p className='text-3xl font-bold text-black'>{
-                                                    lang == topic.topic ? topic.score : ""
-                                                }</p>
-                                            </div>
-                                        })
-                                    }
-                                </span>
-                            </div>
-                            {/* Additional information if needed */}
-                        </motion.div>
-                    ))}
-                </div>
-                }
-
-                    
-                </div>
-            </div>
-
-
-        </>
-    )
-}
-
-export default Leaderboard
+export default Leaderboard;
