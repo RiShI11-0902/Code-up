@@ -21,6 +21,7 @@ router
                 if (err) {
                     return next(err);
                 }
+                // res.cookie('token', user.id) // for storing cookie
                 return res.status(200).json({ name: user.name, id: user.id });
             });
         })(req, res, next)})
