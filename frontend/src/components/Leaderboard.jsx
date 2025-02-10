@@ -13,7 +13,7 @@ const Leaderboard = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.post("http://localhost:8000/user/highscores", { lang });
+        const response = await axios.post("/user/highscores", { lang });
         setUsers(response.data.user);
       } catch (error) {
         console.error("Error fetching data:", error);
