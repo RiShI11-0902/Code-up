@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -150,7 +152,7 @@ const QuizPage = () => {
             ${selectedOption === ind ? (isCorrect ? "bg-green-500" : "bg-red-500") : "bg-gray-200"}`}
                   onClick={() => increase(questions[index]._id, ind, index)}
                 >
-                  <label>{ind + 1})</label>
+                  <label>{ind + 1}</label>
                   <label id={ind} htmlFor={`option${index}`} className="text-gray-800 cursor-pointer text-sm md:text-xl">
                     {option}
                   </label>
